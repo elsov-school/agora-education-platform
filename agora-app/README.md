@@ -41,14 +41,99 @@ O fluxo de verificação amplia a FN-03, mantendo exatamente as seis macrofuncio
 
 ## Instalação e execução
 
+### 1. Preparar o projeto
+
+Você precisa de **Python 3.9 ou superior** e de um navegador. Confira com `python3 --version` no macOS/Linux ou `py --version` no Windows.
+
+Se ainda não baixou o repositório, execute no terminal:
+
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install -r requirements.txt
-python3 app.py
+git clone https://github.com/elsov-school/agora-education-platform.git
+cd agora-education-platform
 ```
 
-Acesse `http://127.0.0.1:5000`. O banco `data/agora.db` é criado e populado automaticamente na primeira execução. Para reiniciar a demonstração, encerre a aplicação, remova somente esse arquivo e execute novamente.
+Também é possível usar **Code → Download ZIP** no GitHub, extrair o arquivo e abrir um terminal na pasta extraída.
+
+Os comandos abaixo partem da **pasta principal do repositório**. Se seu terminal já estiver dentro de `agora-app`, pule o comando `cd agora-app`.
+
+### 2. Instalar e iniciar — macOS ou Linux
+
+```bash
+cd agora-app
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python app.py
+```
+
+### 2. Instalar e iniciar — Windows
+
+No PowerShell ou no Prompt de Comando:
+
+```powershell
+cd agora-app
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe app.py
+```
+
+Se `py` não existir mas `python --version` funcionar, use `python -m venv .venv` para criar o ambiente.
+
+Os comandos usam diretamente o Python do ambiente `.venv`, sem precisar ativá-lo. A criação do ambiente e a instalação das dependências são necessárias apenas na primeira vez. A instalação requer internet; o uso dos dados e das funcionalidades é local.
+
+### 3. Abrir no navegador
+
+Quando o terminal mostrar o servidor em execução, acesse **[http://127.0.0.1:5000](http://127.0.0.1:5000)**. Escolha um perfil para entrar; não é necessário cadastrar uma conta ou informar senha.
+
+Mantenha o terminal aberto enquanto usa a aplicação. Para encerrar o servidor, pressione **Ctrl+C** nesse terminal.
+
+### Próximas execuções
+
+Abra um terminal **dentro de `agora-app`** e execute apenas o comando correspondente:
+
+**macOS/Linux:**
+
+```bash
+.venv/bin/python app.py
+```
+
+**Windows:**
+
+```powershell
+.\.venv\Scripts\python.exe app.py
+```
+
+### Usar no VS Code
+
+Abra a pasta `agora-app` no VS Code, escolha **Terminal → Novo Terminal** e use os comandos acima, pulando `cd agora-app`. A execução pelo terminal não depende de configurar o F5.
+
+### Dados da demonstração
+
+O banco `data/agora.db` é criado e populado automaticamente na primeira execução. Cadastros e alterações continuam salvos quando o servidor é encerrado. O banco é local e fica fora do Git.
+
+Para voltar aos dados iniciais, encerre o servidor, faça uma cópia do banco se quiser preservar suas alterações, remova apenas `data/agora.db` e inicie a aplicação novamente. Isso apaga os cadastros e as alterações locais da demonstração.
+
+## Problemas comuns
+
+- **`No module named flask`:** dentro de `agora-app`, execute novamente o comando de instalação de `requirements.txt` com o Python de `.venv`.
+- **Arquivo não encontrado:** confirme que o terminal está na pasta `agora-app`, onde ficam `app.py` e `requirements.txt`.
+- **Python não encontrado:** instale Python 3.9+ e reabra o terminal. No Windows, habilite a opção de adicionar o Python ao PATH durante a instalação.
+- **Porta 5000 ocupada (`Address already in use`):** encerre outro servidor que esteja usando essa porta ou use a porta 5001 com um dos comandos abaixo, dentro de `agora-app`.
+
+**macOS/Linux:**
+
+```bash
+.venv/bin/python -m flask --app app run --port 5001
+```
+
+**Windows:**
+
+```powershell
+.\.venv\Scripts\python.exe -m flask --app app run --port 5001
+```
+
+Nesse caso, abra **[http://127.0.0.1:5001](http://127.0.0.1:5001)**.
+
+Se o navegador não conectar, confirme que o servidor ainda está rodando no terminal e que você abriu o endereço e a porta mostrados por ele.
 
 ## Perfis de demonstração
 
@@ -70,11 +155,21 @@ O acesso é simulado: basta escolher o perfil na tela inicial, sem senha.
 
 ## Testes
 
+Com as dependências instaladas, abra um terminal **dentro de `agora-app`**.
+
+**macOS/Linux:**
+
 ```bash
-python3 -m unittest discover -s tests -v
+.venv/bin/python -m unittest discover -s tests -v
 ```
 
-Os testes usam um banco temporário, sem modificar os dados da demonstração.
+**Windows:**
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+```
+
+Os testes usam um banco temporário para validar as operações, sem modificar os dados da demonstração.
 
 ## Estrutura
 

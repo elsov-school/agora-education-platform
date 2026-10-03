@@ -8,19 +8,80 @@ com funções simples e apenas as bibliotecas padrão `json` e `os`.
 
 ## Como executar
 
-Com Python 3 instalado, abra o terminal ou PowerShell na pasta do projeto:
+### 1. Preparar o projeto
 
-```text
-cd prototipo-terminal-python
-python main.py
+Você precisa apenas de **Python 3**. O programa usa as bibliotecas padrão `json` e `os`; não é necessário instalar pacotes, criar um ambiente virtual ou iniciar a aplicação web.
+
+Confira o Python com `python3 --version` no macOS/Linux ou `py --version` no Windows.
+
+Se ainda não baixou o repositório, execute no terminal:
+
+```bash
+git clone https://github.com/elsov-school/agora-education-platform.git
+cd agora-education-platform
 ```
 
-Se o comando Python 3 do seu computador for `python3`, use `python3 main.py`.
-Não é necessário instalar pacotes.
+Também é possível usar **Code → Download ZIP** no GitHub, extrair o arquivo e abrir um terminal na pasta extraída.
 
-Digite o número da opção desejada. Disciplinas e bimestres também são escolhidos
-por números. Para editar, pressione Enter nos campos que deseja manter.
-A opção `0` encerra o programa; no gerenciamento, ela volta ao menu principal.
+### 2. Iniciar o programa
+
+Os comandos abaixo partem da **pasta principal do repositório**. Se o terminal já estiver dentro de `prototipo-terminal-python`, pule o comando `cd prototipo-terminal-python`.
+
+**macOS ou Linux:**
+
+```bash
+cd prototipo-terminal-python
+python3 main.py
+```
+
+**Windows (PowerShell ou Prompt de Comando):**
+
+```powershell
+cd prototipo-terminal-python
+py main.py
+```
+
+Se `py` não existir mas `python --version` funcionar, use `python main.py`.
+
+O programa aparece no próprio terminal. Não é necessário abrir o navegador.
+
+### 3. Usar o menu
+
+```text
+1 - Adicionar material
+2 - Gerenciar materiais
+3 - Pesquisar material
+4 - Gerar atividade
+5 - Consultar conteúdo
+6 - Resumo da biblioteca
+0 - Sair
+```
+
+Digite o número da opção desejada e pressione **Enter**.
+
+Para testar o CRUD:
+
+1. Use **1** para cadastrar um material e preencher os campos solicitados.
+2. Use **2** para listar, visualizar, editar ou excluir materiais.
+3. Ao editar, pressione **Enter** nos campos que deseja manter.
+4. Ao excluir, confirme com **s** quando solicitado.
+
+Disciplinas e bimestres também são escolhidos por números. A opção **0** encerra o programa no menu principal; em **Gerenciar materiais**, volta ao menu principal.
+
+### Usar no VS Code
+
+Abra a pasta `prototipo-terminal-python`, escolha **Terminal → Novo Terminal** e execute `python3 main.py` (macOS/Linux) ou `py main.py` (Windows). Não é necessário configurar o F5.
+
+### Executar novamente e manter os dados
+
+Dentro de `prototipo-terminal-python`, use novamente o mesmo comando de execução. Os cadastros, as edições e as exclusões são salvos em `dados.json`, na pasta do programa, e permanecem entre execuções.
+
+## Problemas comuns
+
+- **Python não encontrado:** instale Python 3 e reabra o terminal. No Windows, habilite a opção de adicionar o Python ao PATH durante a instalação.
+- **`can't open file` ou arquivo não encontrado:** confirme que o terminal está dentro de `prototipo-terminal-python`, onde fica `main.py`.
+- **O programa abre e fecha rapidamente:** execute pelo terminal para conseguir ler o menu e digitar as opções.
+- **`JSON inválido`:** o programa informa o erro e encerra sem sobrescrever `dados.json`. Faça uma cópia do arquivo antes de corrigi-lo. Para reiniciar com os quatro exemplos, renomeie o arquivo e execute novamente.
 
 ## Funcionalidades
 
@@ -63,5 +124,5 @@ Atividades e consultas usam os materiais locais e perguntas fixas, sem IA.
   preservando os acentos com codificação UTF-8.
 - `try/except`: trata texto digitado no lugar de números e JSON inválido.
 
-Os materiais são mantidos entre execuções. Como pedido, uma biblioteca vazia
-recebe novamente os quatro exemplos na próxima inicialização.
+Os materiais são mantidos entre execuções. Uma biblioteca vazia recebe novamente
+os quatro exemplos na próxima inicialização.
