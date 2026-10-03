@@ -106,3 +106,6 @@ input:focus,textarea:focus,select:focus{border-color:var(--terracotta);box-shado
   .login-box{padding:25px 18px}
   .approved-sources-illustration{width:190px}
 }
+
+.demo-notice{padding:14px 20px;margin-bottom:24px;border:1px solid var(--sand);border-radius:10px;background:var(--ivory);color:var(--aegean);font-size:.9rem;line-height:1.5}
+.auth-shell .demo-notice{margin:0;border:0;border-radius:0;text-align:center}

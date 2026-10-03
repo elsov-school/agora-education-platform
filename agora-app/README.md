@@ -114,7 +114,11 @@ Para voltar aos dados iniciais, encerre o servidor, faça uma cópia do banco se
 
 ## Publicação na Vercel
 
+**Acesse a demonstração:** [agora-app-orcin.vercel.app](https://agora-app-orcin.vercel.app).
+
 O projeto da Vercel usa a pasta **`agora-app`** como **Root Directory** e o framework **Flask**. O arquivo `vercel.json` define o build; `build.py` copia os arquivos de `static/` para `public/static/`, permitindo que a Vercel entregue as imagens, o CSS e o JavaScript.
+
+A publicação atual foi feita pela CLI da Vercel. A conexão automática com o repositório GitHub ainda não foi autorizada pela Vercel; novos pushes não publicam o site automaticamente. Para publicar alterações com a CLI, na pasta principal do repositório, vincule o projeto com `vercel link --yes --project agora-app --scope lohans-projects-1668e663` e execute `vercel deploy --prod --scope lohans-projects-1668e663`.
 
 Na Vercel, esta versão funciona em **modo de demonstração**:
 

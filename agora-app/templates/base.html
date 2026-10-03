@@ -39,7 +39,7 @@
   <main>
   {% endif %}
     {% if config.DEMO_MODE %}
-    <div class="flash-stack"><div class="flash info" role="status">Demonstração online: os cadastros e as alterações são temporários e podem ser reiniciados.</div></div>
+    <div class="demo-notice" role="status">Demonstração online: os cadastros e as alterações são temporários e podem ser reiniciados.</div>
     {% endif %}
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button type="button" aria-label="Fechar">×</button></div>{% endfor %}</div>{% endif %}
