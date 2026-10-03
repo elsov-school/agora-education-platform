@@ -2,6 +2,8 @@
 
 Apresentação HTML independente da aplicação web e do CRUD em Python.
 
+**Abrir online:** [agora-apresentacao.vercel.app](https://agora-apresentacao.vercel.app).
+
 O arquivo `index.html` é uma cópia do original `agora-apresentacao-completa-v6.html`, com o nome padrão para abrir na página inicial do site. O conteúdo foi preservado, incluindo as imagens incorporadas e os controles da apresentação.
 
 ## Abrir no computador
