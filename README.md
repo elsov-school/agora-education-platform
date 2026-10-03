@@ -2,7 +2,7 @@
 
 > **Saber com fonte.**
 
-A Ágora é um projeto acadêmico para organizar, consultar e produzir conteúdos educacionais com fontes e validação pedagógica. Este repositório reúne **dois protótipos independentes**, cada um em sua pasta.
+A Ágora é um projeto acadêmico para organizar, consultar e produzir conteúdos educacionais com fontes e validação pedagógica. Este repositório reúne **dois protótipos independentes e uma apresentação HTML**, cada um em sua pasta.
 
 ## Qual versão executar?
 
@@ -10,14 +10,17 @@ A Ágora é um projeto acadêmico para organizar, consultar e produzir conteúdo
 | --- | --- | --- | --- |
 | `agora-app/` | Navegador | Biblioteca, atividades, consulta com evidências, verificação de conteúdo, validação e painel | [README da aplicação web](agora-app/README.md) |
 | `prototipo-terminal-python/` | Terminal | CRUD de materiais, pesquisa, atividades fixas, consulta e resumo da biblioteca | [README do CRUD em Python](prototipo-terminal-python/README.md) |
+| `agora-apresentacao/` | Navegador | Apresentação do projeto em HTML | [README da apresentação](agora-apresentacao/README.md) |
 
 Para testar o **CRUD simples**, escolha a versão de terminal. Para ver a **interface da plataforma**, escolha a aplicação web. Você pode executar apenas uma delas; os projetos usam dados separados.
+
+Para ver a apresentação, abra `agora-apresentacao/index.html` no navegador. Essa versão não precisa de Python ou instalação de pacotes.
 
 Os protótipos atuais usam busca textual e geração local. Não precisam de conta em serviço de IA nem de chave de API. A integração com LLMs, embeddings e um pipeline RAG faz parte da proposta de evolução.
 
 ## 1. Baixar o repositório
 
-Você precisa de **Python 3.9 ou superior**. Para usar o comando abaixo, também precisa de Git.
+Para executar os protótipos, você precisa de **Python 3.9 ou superior**. A apresentação HTML precisa apenas de um navegador. Para usar o comando abaixo, também precisa de Git.
 
 Abra um terminal (no VS Code: **Terminal → Novo Terminal**) e execute:
 
@@ -128,10 +131,14 @@ agora-education-platform/
 │   ├── static/
 │   ├── docs/
 │   └── tests/
-└── prototipo-terminal-python/
+├── prototipo-terminal-python/
+│   ├── README.md
+│   ├── main.py
+│   └── dados.json
+└── agora-apresentacao/
     ├── README.md
-    ├── main.py
-    └── dados.json
+    ├── index.html
+    └── vercel.json
 ```
 
 O ambiente `.venv/` e o banco `data/agora.db` são criados localmente durante a instalação e o uso da aplicação web.
