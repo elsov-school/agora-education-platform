@@ -105,6 +105,12 @@ Depois da instalação inicial, entre em `agora-app` e use apenas:
 
 O SQLite cria e popula `agora-app/data/agora.db` automaticamente na primeira execução. Esse banco é local e não é enviado ao GitHub.
 
+## Demonstração na Vercel
+
+A versão web pode ser publicada na Vercel usando `agora-app` como **Root Directory**. Nessa publicação, os dados são temporários e podem ser reiniciados; para salvar cadastros permanentemente online, é necessário um banco externo. O uso local continua salvando os dados no SQLite normalmente.
+
+Consulte a [configuração de publicação](agora-app/README.md#publicação-na-vercel) no guia da aplicação web.
+
 ## Estrutura do repositório
 
 ```text

@@ -112,6 +112,23 @@ O banco `data/agora.db` é criado e populado automaticamente na primeira execuç
 
 Para voltar aos dados iniciais, encerre o servidor, faça uma cópia do banco se quiser preservar suas alterações, remova apenas `data/agora.db` e inicie a aplicação novamente. Isso apaga os cadastros e as alterações locais da demonstração.
 
+## Publicação na Vercel
+
+O projeto da Vercel usa a pasta **`agora-app`** como **Root Directory** e o framework **Flask**. O arquivo `vercel.json` define o build; `build.py` copia os arquivos de `static/` para `public/static/`, permitindo que a Vercel entregue as imagens, o CSS e o JavaScript.
+
+Na Vercel, esta versão funciona em **modo de demonstração**:
+
+- Os dados iniciais são criados automaticamente em um SQLite temporário.
+- Cadastros e alterações podem desaparecer quando a instância reiniciar e não são compartilhados entre instâncias.
+- A interface mostra um aviso de que os dados são temporários.
+- O banco local do seu computador não é enviado para o site.
+
+A [Vercel não oferece persistência para o arquivo SQLite local](https://vercel.com/kb/guide/is-sqlite-supported-in-vercel). Para manter os cadastros online permanentemente, será necessário adaptar a aplicação para um banco externo.
+
+Configure a variável **`SECRET_KEY`** nos ambientes Production e Preview do projeto da Vercel, com um valor aleatório e privado. A aplicação exige essa variável na Vercel para assinar as sessões. Não coloque o valor no código ou no GitHub.
+
+Ao executar no seu computador, o banco continua em `data/agora.db` e os dados permanecem salvos normalmente. A variável opcional `DATABASE_PATH` permite definir outro caminho para o SQLite.
+
 ## Problemas comuns
 
 - **`No module named flask`:** dentro de `agora-app`, execute novamente o comando de instalação de `requirements.txt` com o Python de `.venv`.
@@ -175,6 +192,8 @@ Os testes usam um banco temporário para validar as operações, sem modificar o
 
 ```text
 app.py                     Rotas, perfis e composição das telas
+build.py                   Prepara os arquivos estáticos para a Vercel
+vercel.json                Configuração da publicação na Vercel
 config.py                  Tuplas fixas e configuração
 database.py                Schema SQLite, conexão e dados iniciais
 services/

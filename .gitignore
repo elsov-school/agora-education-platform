@@ -10,3 +10,5 @@ agora-app/data/*.db
 agora-app/data/*.db-journal
 agora-app/data/*.db-wal
 agora-app/data/*.db-shm
+.vercel/
+.vercel

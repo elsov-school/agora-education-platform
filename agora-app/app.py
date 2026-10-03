@@ -3,7 +3,7 @@ from functools import wraps
 
 from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
 
-from config import DATABASE_PATH, DIFICULDADES, SECRET_KEY, TIPOS_QUESTAO
+from config import DATABASE_PATH, DEMO_MODE, DIFICULDADES, SECRET_KEY, TIPOS_QUESTAO
 from database import connect, init_database
 from services import assistant as assistant_service
 from services import dashboard as dashboard_service
@@ -36,7 +36,7 @@ def display_label(value):
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    app.config.update(SECRET_KEY=SECRET_KEY, DATABASE=DATABASE_PATH)
+    app.config.update(SECRET_KEY=SECRET_KEY, DATABASE=DATABASE_PATH, DEMO_MODE=DEMO_MODE)
     if test_config:
         app.config.update(test_config)
     app.jinja_env.filters["label"] = display_label

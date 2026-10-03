@@ -2,6 +2,10 @@
 .pycache/
 __pycache__/
 *.py[cod]
-data/*.db-journal
-.vercel/
+.DS_Store
+.env
+.env.*
+data/
 public/
+tests/
+docs/
