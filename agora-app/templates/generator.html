@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Gerar atividade{% endblock %}
+{% block content %}
+<header class="page-header"><div><span class="eyebrow green">FN-02</span><h1>Gerador de provas e atividades</h1><p>Monte uma atividade rastreável, baseada apenas nas fontes que você escolher.</p></div></header>
+<section class="generator-layout">
+  <form method="post" class="card form-card" id="generator-form">
+    <div class="step-title"><span>1</span><div><h2>Contexto da atividade</h2><p>Defina para quem e sobre o que será a atividade.</p></div></div>
+    <div class="form-grid"><label class="span-2">Título (opcional)<input name="title" value="{{ prompt|truncate(90, True, '') }}" placeholder="Ex.: Revisão do 2º bimestre"></label><label>Turma<select name="class_name" required data-filter-class><option value="">Selecione</option>{% for item in current_user.classes %}<option value="{{ item }}">{{ item|label }}</option>{% endfor %}</select></label><label>Disciplina<select name="subject" required data-filter-subject><option value="">Selecione</option>{% for item in current_user.subjects %}<option value="{{ item }}">{{ item|label }}</option>{% endfor %}</select></label></div>
+    <div class="divider"></div><div class="step-title"><span>2</span><div><h2>Fontes institucionais</h2><p>Somente os materiais marcados poderão ser usados.</p></div></div>
+    <div class="source-picker" data-source-picker>{% for material in materials %}<label data-class="{{ material.class_name }}" data-subject="{{ material.subject }}"><input type="checkbox" name="material_ids" value="{{ material.id }}"><span class="source-check">✓</span><span><strong>{{ material.title }}</strong><small>{{ material.subject|label }} · {{ material.class_name|label }} · {{ material.bncc }}</small></span></label>{% endfor %}<div class="source-empty" data-source-empty>Selecione turma e disciplina para ver as fontes disponíveis.</div></div>
+    <div class="divider"></div><div class="step-title"><span>3</span><div><h2>Formato das questões</h2><p>O limite institucional atual é de {{ settings.max_questions }} questões.</p></div></div>
+    <div class="form-grid three"><label>Quantidade<input type="number" required min="1" max="{{ settings.max_questions }}" value="5" name="quantity"><small>Máximo: {{ settings.max_questions }}</small></label><label>Tipo<select name="question_type">{% for item in settings.allowed_types %}<option value="{{ item }}">{{ item|label }}</option>{% endfor %}</select></label><label>Dificuldade<select name="difficulty">{% for item in DIFICULDADES %}<option value="{{ item }}" {{ 'selected' if item == settings.default_difficulty }}>{{ item|label }}</option>{% endfor %}</select></label></div>
+    <div class="institutional-note"><span>⌾</span><div><strong>Padrão institucional ativo</strong><p>{{ settings.instructions }} {% if settings.require_source %}Toda questão deverá exibir sua fonte.{% endif %}</p></div></div>
+    <div class="form-actions"><a class="button ghost" href="{{ url_for('home') }}">Cancelar</a><button class="button primary" type="submit">✦ Gerar atividade</button></div>
+  </form>
+  <aside class="card help-card"><span class="help-illustration">✦</span><h2>Como funciona?</h2><ol><li><span>1</span><p>Você seleciona materiais já aprovados pela escola.</p></li><li><span>2</span><p>O gerador local identifica trechos utilizáveis.</p></li><li><span>3</span><p>Cada questão mantém vínculo com a fonte original.</p></li></ol><p class="trust-note">Nenhuma informação externa é adicionada.</p></aside>
+</section>
+{% endblock %}

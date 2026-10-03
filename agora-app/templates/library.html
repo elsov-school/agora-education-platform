@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Biblioteca curricular{% endblock %}
+{% block content %}
+<header class="page-header"><div><span class="eyebrow green">FN-01 · Fluxo 3</span><h1>Conteúdos da instituição</h1><p>Materiais e produções pedagógicas organizados, rastreáveis e alinhados ao currículo.</p></div>{% if current_user.role == 'Coordenacao' %}<a class="button primary" href="{{ url_for('material_new') }}">+ Adicionar material</a>{% else %}<a class="button primary" href="{{ url_for('generator') }}">+ Criar conteúdo</a>{% endif %}</header>
+{% if current_user.role == 'Professor' %}<nav class="content-tabs"><a class="{{ 'active' if view == 'materials' }}" href="{{ url_for('library') }}">Materiais</a><a class="{{ 'active' if view == 'activities' }}" href="{{ url_for('library', view='activities') }}">Atividades e provas</a><a class="{{ 'active' if view == 'verifications' }}" href="{{ url_for('library', view='verifications') }}">Verificados</a></nav>{% endif %}
+{% if view == 'materials' %}
+<form class="filter-card" method="get">
+  <label class="search-field"><span>⌕</span><input name="search" value="{{ filters.search }}" placeholder="Pesquisar por título ou conteúdo"></label>
+  <select name="subject"><option value="">Todas as disciplinas</option>{% for item in options.subjects %}<option value="{{ item }}" {{ 'selected' if filters.subject == item }}>{{ item|label }}</option>{% endfor %}</select>
+  <select name="class_name"><option value="">Todas as turmas</option>{% for item in options.classes %}<option value="{{ item }}" {{ 'selected' if filters.class_name == item }}>{{ item|label }}</option>{% endfor %}</select>
+  <select name="bimester"><option value="">Todos os bimestres</option>{% for item in options.bimesters %}<option value="{{ item }}" {{ 'selected' if filters.bimester|string == item|string }}>{{ item }}º bimestre</option>{% endfor %}</select>
+  <input name="bncc" value="{{ filters.bncc }}" placeholder="Código BNCC">
+  <button class="button secondary" type="submit">Filtrar</button>
+</form>
+{% if materials %}<section class="material-grid">{% for material in materials %}
+  <article class="material-card"><div class="material-top"><span class="subject-dot subject-{{ material.subject|lower }}">{{ material.subject[0] }}</span><span class="badge {{ 'approved' if material.approval_status == 'Aprovado' else 'pending' }}">{{ material.approval_status }}</span></div><div><span class="meta">{{ material.material_type }} · {{ material.class_name|label }}</span><h2>{{ material.title }}</h2><p>{{ material.content|truncate(135) }}</p></div><div class="material-bottom"><span>{{ material.bncc }} · {{ material.bimester }}º bim.</span><a href="{{ url_for('material_detail', material_id=material.id) }}">Ver material →</a></div></article>
+{% endfor %}</section>{% else %}<div class="empty-state card"><span>⌕</span><h2>Nenhum material encontrado</h2><p>Ajuste os filtros ou cadastre um novo material institucional.</p></div>{% endif %}
+{% elif view == 'activities' %}
+<section class="card content-table"><div class="table-toolbar"><span>{{ activities|length }} conteúdo(s)</span><a class="button primary" href="{{ url_for('generator') }}">+ Nova atividade</a></div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Disciplina</th><th>Turma</th><th>Status</th><th></th></tr></thead><tbody>{% for item in activities %}<tr><td><strong>{{ item.title }}</strong></td><td>Atividade</td><td>{{ item.subject|label }}</td><td>{{ item.class_name|label }}</td><td><span class="badge status-{{ item.status|lower|replace(' ','-') }}">{{ item.status|label }}</span></td><td><a href="{{ url_for('activity_detail', activity_id=item.id) }}">Abrir →</a></td></tr>{% else %}<tr><td colspan="6">Nenhuma atividade criada.</td></tr>{% endfor %}</tbody></table></div></section>
+{% else %}
+<section class="card content-table"><div class="table-toolbar"><span>{{ verifications|length }} verificação(ões)</span><a class="button primary" href="{{ url_for('verify_content') }}">+ Verificar conteúdo</a></div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Disciplina</th><th>Turma</th><th>Afirmações</th><th>Alertas</th><th></th></tr></thead><tbody>{% for item in verifications %}<tr><td><strong>{{ item.title }}</strong></td><td>{{ item.subject|label }}</td><td>{{ item.class_name|label }}</td><td>{{ item.item_count }}</td><td>{{ item.not_found or 0 }}</td><td><a href="{{ url_for('verification_detail', verification_id=item.id) }}">Abrir →</a></td></tr>{% else %}<tr><td colspan="6">Nenhum conteúdo verificado.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endif %}
+{% endblock %}

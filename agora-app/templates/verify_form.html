@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Verificar conteúdo{% endblock %}
+{% block content %}
+<header class="page-header"><div><span class="eyebrow green">Fluxo 2 · Evidências institucionais</span><h1>Verificar conteúdo</h1><p>Cole um texto produzido por IA ou por outra fonte. Cada afirmação será comparada aos materiais aprovados.</p></div><a class="button secondary" href="{{ url_for('home') }}">Cancelar</a></header>
+
+<form method="post" class="verify-layout" data-verify-form>
+  <section class="card form-card">
+    <div class="step-title"><span>1</span><div><h2>Conteúdo externo</h2><p>O sistema não corrige nem completa o texto: apenas verifica sua sustentação.</p></div></div>
+    <div class="form-grid"><label class="span-2">Título da verificação<input name="title" placeholder="Ex.: Texto sobre fotossíntese"></label><label>Turma<select name="class_name" required data-filter-class><option value="">Selecione</option>{% for item in current_user.classes %}<option value="{{ item }}">{{ item|label }}</option>{% endfor %}</select></label><label>Disciplina<select name="subject" required data-filter-subject><option value="">Selecione</option>{% for item in current_user.subjects %}<option value="{{ item }}">{{ item|label }}</option>{% endfor %}</select></label><label class="span-3">Texto para análise<textarea name="content" rows="11" required placeholder="Cole aqui o conteúdo que deseja verificar...">{{ draft }}</textarea><small>Separe afirmações com ponto final para obter uma análise mais precisa.</small></label></div>
+  </section>
+  <aside class="card verify-sources"><div class="step-title"><span>2</span><div><h2>Fontes de comparação</h2><p>Selecione quais materiais aprovados serão consultados.</p></div></div><div class="source-picker single" data-source-picker>{% for material in materials %}<label data-class="{{ material.class_name }}" data-subject="{{ material.subject }}"><input type="checkbox" name="material_ids" value="{{ material.id }}" checked><span class="source-check">✓</span><span><strong>{{ material.title }}</strong><small>{{ material.subject|label }} · {{ material.class_name|label }}</small></span></label>{% endfor %}<div class="source-empty" data-source-empty>Selecione turma e disciplina.</div></div><div class="institutional-note"><span>✓</span><div><strong>Somente fontes aprovadas</strong><p>Materiais pendentes ou de outras turmas não entram na comparação.</p></div></div><button class="button primary full" type="submit">Verificar afirmações →</button></aside>
+</form>
+{% endblock %}
+

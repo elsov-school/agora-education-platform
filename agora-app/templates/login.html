@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Acesso demonstrativo{% endblock %}
+{% block content %}
+<section class="login-page">
+  <div class="login-visual">
+    <a class="brand brand-light"><img class="brand-logo" src="{{ url_for('static', filename='brand/agora-whatsapp.png') }}" alt=""><span>Ágora<small>Saber com fonte</small></span></a>
+    <div class="login-message"><span class="eyebrow">Plataforma institucional</span><h1>Ensinar com IA.<br>Confiar nas fontes.</h1><p>Produção pedagógica orientada por materiais validados pela sua escola.</p></div>
+    <div class="quote-card"><span>•</span><p>A praça onde o conhecimento é discutido, e a fonte é conhecida.</p></div>
+  </div>
+  <div class="login-panel">
+    <div class="login-box"><span class="eyebrow green">Protótipo acadêmico</span><h2>Como você quer entrar?</h2><p>Escolha um perfil de demonstração. Não é necessário usar senha.</p>
+      <form method="post" class="profile-list">
+        {% for user in users %}
+        <button name="user_id" value="{{ user.id }}" class="profile-option" type="submit">
+          <span class="avatar {{ 'coord' if user.role == 'Coordenacao' }}">{{ user.name[0] }}</span>
+          <span><strong>{{ user.name }}</strong><small>{{ user.role|label }}{% if user.role == 'Professor' %} · {% for subject in user.subjects %}{{ subject|label }}{{ ', ' if not loop.last }}{% endfor %}{% endif %}</small></span><b>→</b>
+        </button>
+        {% endfor %}
+      </form>
+      <p class="privacy-note">Ambiente local para fins educacionais. Os dados permanecem neste dispositivo.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

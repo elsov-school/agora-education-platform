@@ -1,0 +1,12 @@
+.DS_Store
+.venv/
+.pycache/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+agora-app/data/*.db
+agora-app/data/*.db-journal
+agora-app/data/*.db-wal
+agora-app/data/*.db-shm

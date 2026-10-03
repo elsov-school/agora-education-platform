@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}IA institucional{% endblock %}
+{% block content %}
+<header class="chat-header"><div><span class="eyebrow green">Início · {{ current_user.name.split()[0] }}</span><h1>O que você deseja criar hoje?</h1><p>Produza e verifique conteúdos usando somente a base aprovada pela instituição.</p></div><div class="header-links">Ajuda · Notificações</div></header>
+
+<section class="composer-card card">
+  <form method="post" action="{{ url_for('create_from_prompt') }}">
+    <textarea name="prompt" rows="4" placeholder="Descreva um conteúdo, atividade ou dúvida..."></textarea>
+    <div class="composer-actions"><span>{{ material_count }} fontes aprovadas disponíveis</span><div><button type="button" class="button ghost" data-show-sources>▤ Fontes</button><button class="button primary" name="intent" value="activity" type="submit">Enviar →</button></div></div>
+  </form>
+</section>
+
+<div class="quick-prompts">
+  <a href="{{ url_for('generator') }}">Criar atividade</a>
+  <a href="{{ url_for('generator') }}">Criar prova</a>
+  <a href="{{ url_for('generator') }}">Criar questões</a>
+  <a href="{{ url_for('assistant') }}">Consultar a base</a>
+  <a href="{{ url_for('verify_content') }}">Verificar conteúdo</a>
+</div>
+
+<section class="home-flow-grid">
+  <article class="card recent-panel"><div class="section-heading"><div><span class="eyebrow">Conteúdos recentes</span><h2>Continue de onde parou</h2></div><a href="{{ url_for('library', view='activities') }}">Ver biblioteca →</a></div>
+    {% if activities %}<div class="wire-list">{% for item in activities[:4] %}<a href="{{ url_for('activity_detail', activity_id=item.id) }}"><span class="doc-icon">A</span><div><strong>{{ item.title }}</strong><small>{{ item.subject|label }} · {{ item.class_name|label }}</small></div><span class="badge status-{{ item.status|lower|replace(' ','-') }}">{{ item.status|label }}</span></a>{% endfor %}</div>{% else %}<div class="mini-empty">Nenhuma atividade criada ainda.</div>{% endif %}
+  </article>
+  <article class="card recent-panel"><div class="section-heading"><div><span class="eyebrow">Verificações recentes</span><h2>Conteúdos analisados</h2></div><a href="{{ url_for('verify_content') }}">Nova verificação →</a></div>
+    {% if verifications %}<div class="wire-list">{% for item in verifications[:4] %}<a href="{{ url_for('verification_detail', verification_id=item.id) }}"><span class="doc-icon check">✓</span><div><strong>{{ item.title }}</strong><small>{{ item.subject|label }} · {{ item.item_count }} afirmações</small></div>{% if item.not_found %}<span class="badge status-reprovado">{{ item.not_found }} alerta(s)</span>{% else %}<span class="badge approved">Suportado</span>{% endif %}</a>{% endfor %}</div>{% else %}<div class="mini-empty">Nenhum conteúdo verificado ainda.</div>{% endif %}
+  </article>
+</section>
+
+<aside class="source-drawer" data-source-drawer aria-hidden="true"><div class="drawer-backdrop" data-close-sources></div><div class="drawer-panel"><button type="button" class="drawer-close" data-close-sources>×</button><span class="eyebrow">Fontes</span><h2>Materiais disponíveis</h2><p>Estes materiais aprovados podem fundamentar sua próxima criação.</p><div class="drawer-list">{% for material in materials %}<a href="{{ url_for('material_detail', material_id=material.id) }}"><strong>{{ material.title }}</strong><small>{{ material.subject|label }} · {{ material.class_name|label }} · {{ material.bncc }}</small></a>{% endfor %}</div><a class="button primary full" href="{{ url_for('library') }}">Abrir biblioteca</a></div></aside>
+{% endblock %}

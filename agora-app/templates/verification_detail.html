@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Resultado · {{ verification.title }}{% endblock %}
+{% block content %}
+<header class="page-header compact"><div><a class="back-link" href="{{ url_for('verify_content') }}">← Nova verificação</a><span class="eyebrow green">Resultado da verificação</span><h1>{{ verification.title }}</h1><p>{{ verification.subject|label }} · {{ verification.class_name|label }} · análise de {{ verification['items']|length }} afirmação(ões)</p></div><a class="button secondary" href="{{ url_for('home') }}">Salvar e voltar</a></header>
+
+<section class="verification-result">
+  <article class="card submitted-content"><span class="eyebrow">Conteúdo enviado</span><p>{{ verification.content }}</p></article>
+  <div class="result-main">
+    <section class="evidence-summary"><article><strong>{{ verification.counts.supported }}</strong><span>Suportadas</span></article><article class="partial"><strong>{{ verification.counts.partial }}</strong><span>Parcialmente suportadas</span></article><article class="warning"><strong>{{ verification.counts.not_found }}</strong><span>Não localizadas</span></article></section>
+    <section class="claim-list">{% for item in verification['items'] %}<article class="card claim-card status-claim-{{ item.status|lower|replace(' ','-') }}"><div class="claim-number">{{ loop.index }}</div><div><span class="claim-status">{% if item.status == 'Suportado' %}✓ Conteúdo encontrado nas fontes{% elif item.status == 'Parcialmente suportado' %}◐ Parcialmente suportado{% else %}! Não localizado{% endif %}</span><p>{{ item.claim }}</p>{% if item.matched_excerpt %}<blockquote>{{ item.matched_excerpt }}</blockquote><div class="claim-source"><span>Fonte institucional</span><a href="{{ url_for('material_detail', material_id=item.material_id) }}">{{ item.material_title }} · {{ item.bncc }} →</a></div>{% else %}<div class="claim-source missing"><span>Sem evidência suficiente</span><small>Revise ou remova esta afirmação antes de usar o conteúdo.</small></div>{% endif %}</div></article>{% endfor %}</section>
+  </div>
+</section>
+{% endblock %}

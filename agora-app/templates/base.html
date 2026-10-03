@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Ágora{% endblock %} · Saber com fonte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='brand/agora-whatsapp.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if current_user %}app-shell{% else %}auth-shell{% endif %}">
+  {% if current_user %}
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{{ url_for('home') }}"><img class="brand-logo" src="{{ url_for('static', filename='brand/agora-whatsapp.png') }}" alt=""><span>Ágora<small>Saber com fonte</small></span></a>
+    <nav>
+      {% if current_user.role == 'Professor' %}
+      <a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' }}"><span>◎</span> IA / Chat</a>
+      <a href="{{ url_for('generator') }}" class="{{ 'active' if request.endpoint in ['generator','activity_detail'] }}"><span>＋</span> Criar conteúdo</a>
+      <a href="{{ url_for('verify_content') }}" class="{{ 'active' if request.endpoint in ['verify_content','verification_detail'] }}"><span>✓</span> Verificar conteúdo</a>
+      <a href="{{ url_for('library') }}" class="{{ 'active' if request.endpoint in ['library','material_detail'] }}"><span>▤</span> Biblioteca</a>
+      <a href="{{ url_for('assistant') }}" class="{{ 'active' if request.endpoint == 'assistant' }}"><span>⌕</span> Consultar evidências</a>
+      {% else %}
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}"><span>⌂</span> Painel</a>
+      <a href="{{ url_for('library') }}" class="{{ 'active' if request.endpoint in ['library','material_detail','material_new','material_edit'] }}"><span>▤</span> Biblioteca</a>
+      <a href="{{ url_for('validation') }}" class="{{ 'active' if request.endpoint in ['validation','activity_detail'] }}"><span>✓</span> Validação</a>
+      <a href="{{ url_for('standards') }}" class="{{ 'active' if request.endpoint == 'standards' }}"><span>⚙</span> Padrões</a>
+      {% endif %}
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip"><span class="avatar">{{ current_user.name[0] }}</span><div><strong>{{ current_user.name }}</strong><small>{{ current_user.role|label }}</small></div></div>
+      <form action="{{ url_for('logout') }}" method="post"><button class="link-button" type="submit">Trocar perfil</button></form>
+    </div>
+  </aside>
+  <header class="mobile-header"><button type="button" data-sidebar aria-label="Abrir menu">☰</button><span class="brand"><img class="brand-logo" src="{{ url_for('static', filename='brand/agora-whatsapp.png') }}" alt="">Ágora</span></header>
+  <main class="main-content">
+  {% else %}
+  <main>
+  {% endif %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button type="button" aria-label="Fechar">×</button></div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
