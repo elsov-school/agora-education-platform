@@ -3,20 +3,9 @@ import os
 
 
 # TUPLAS: opções fixas que não mudam durante a execução.
-BIMESTRES = (
-    "1º Bimestre",
-    "2º Bimestre",
-    "3º Bimestre",
-    "4º Bimestre"
-)
+BIMESTRES = ("1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre")
 
-DISCIPLINAS = (
-    "Português",
-    "Matemática",
-    "Ciências",
-    "História",
-    "Geografia"
-)
+DISCIPLINAS = ("Português", "Matemática", "Ciências", "História", "Geografia")
 
 # LISTA: coleção dos materiais da biblioteca.
 materiais = []
@@ -26,8 +15,7 @@ ARQUIVO_DADOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dados.
 
 
 def materiais_exemplo():
-    # Cada item desta lista é um DICIONÁRIO com os dados de um material.
-    # Os códigos BNCC são ilustrativos para este protótipo acadêmico.
+    """Retorna materiais de exemplo com códigos BNCC ilustrativos."""
     return [
         {
             "id": 1,
@@ -36,7 +24,7 @@ def materiais_exemplo():
             "serie": "6º ano",
             "bimestre": "1º Bimestre",
             "bncc": "EF06CI01",
-            "conteudo": "O Sistema Solar é formado pelo Sol, oito planetas e outros corpos celestes. A Terra é um dos planetas e gira ao redor do Sol."
+            "conteudo": "O Sistema Solar é formado pelo Sol, oito planetas e outros corpos celestes. A Terra é um dos planetas e gira ao redor do Sol.",
         },
         {
             "id": 2,
@@ -45,7 +33,7 @@ def materiais_exemplo():
             "serie": "6º ano",
             "bimestre": "2º Bimestre",
             "bncc": "EF06CI05",
-            "conteudo": "A célula é a unidade básica dos seres vivos. A membrana envolve a célula, e o citoplasma abriga estruturas que participam de suas funções."
+            "conteudo": "A célula é a unidade básica dos seres vivos. A membrana envolve a célula, e o citoplasma abriga estruturas que participam de suas funções.",
         },
         {
             "id": 3,
@@ -54,7 +42,7 @@ def materiais_exemplo():
             "serie": "7º ano",
             "bimestre": "3º Bimestre",
             "bncc": "EF07MA18",
-            "conteudo": "Uma equação do primeiro grau contém uma incógnita elevada à primeira potência. Para resolver x + 3 = 7, subtraímos 3 dos dois lados e encontramos x = 4."
+            "conteudo": "Uma equação do primeiro grau contém uma incógnita elevada à primeira potência. Para resolver x + 3 = 7, subtraímos 3 dos dois lados e encontramos x = 4.",
         },
         {
             "id": 4,
@@ -63,8 +51,8 @@ def materiais_exemplo():
             "serie": "6º ano",
             "bimestre": "4º Bimestre",
             "bncc": "EF06LP01",
-            "conteudo": "Os gêneros textuais são formas de organizar textos conforme sua finalidade. Notícias informam acontecimentos, receitas orientam o preparo de alimentos e contos apresentam histórias."
-        }
+            "conteudo": "Os gêneros textuais são formas de organizar textos conforme sua finalidade. Notícias informam acontecimentos, receitas orientam o preparo de alimentos e contos apresentam histórias.",
+        },
     ]
 
 
@@ -87,7 +75,7 @@ def carregar_dados():
                 print("dados.json deve conter uma lista de materiais.")
                 return False
 
-    if len(materiais) == 0:
+    if not materiais:
         materiais = materiais_exemplo()
         salvar_dados()
 
@@ -102,33 +90,41 @@ def salvar_dados():
 def ler_texto(pergunta, valor_atual=""):
     while True:
         resposta = input(pergunta).strip()
-        if resposta != "":
+        if resposta:
             return resposta
-        elif valor_atual != "":
+        if valor_atual:
             return valor_atual
-        else:
-            print("Preencha este campo.")
+        print("Preencha este campo.")
+
+
+def exibir_separador():
+    print("=" * 40)
+
+
+def exibir_cabecalho(titulo, centralizado=False):
+    print()
+    exibir_separador()
+    print(titulo.center(40) if centralizado else titulo)
+    exibir_separador()
 
 
 def escolher_opcao(titulo, opcoes, valor_atual=""):
     print(titulo)
-    for numero in range(len(opcoes)):
-        print(str(numero + 1) + " - " + opcoes[numero])
+    for numero, opcao in enumerate(opcoes, start=1):
+        print(f"{numero} - {opcao}")
 
     while True:
         resposta = input("Escolha uma opção: ").strip()
-        if resposta == "" and valor_atual != "":
+        if not resposta and valor_atual:
             return valor_atual
         try:
             numero = int(resposta)
         except ValueError:
             print("Digite um número válido.")
             continue
-
         if 1 <= numero <= len(opcoes):
             return opcoes[numero - 1]
-        else:
-            print("Opção inválida.")
+        print("Opção inválida.")
 
 
 def buscar_material_por_id(pergunta="ID: "):
@@ -147,9 +143,7 @@ def buscar_material_por_id(pergunta="ID: "):
 
 
 def adicionar_material():
-    print("\n========================================")
-    print("ADICIONAR MATERIAL")
-    print("========================================")
+    exibir_cabecalho("ADICIONAR MATERIAL")
     titulo = ler_texto("Título: ")
     disciplina = escolher_opcao("Disciplina:", DISCIPLINAS)
     serie = ler_texto("Série: ")
@@ -157,10 +151,7 @@ def adicionar_material():
     bncc = ler_texto("Habilidade BNCC: ")
     conteudo = ler_texto("Conteúdo/descrição: ")
 
-    maior_id = 0
-    for item in materiais:
-        if item["id"] > maior_id:
-            maior_id = item["id"]
+    maior_id = max((material["id"] for material in materiais), default=0)
 
     # DICIONÁRIO: cada chave identifica uma informação do material.
     material = {
@@ -170,7 +161,7 @@ def adicionar_material():
         "serie": serie,
         "bimestre": bimestre,
         "bncc": bncc,
-        "conteudo": conteudo
+        "conteudo": conteudo,
     }
     materiais.append(material)
     salvar_dados()
@@ -178,7 +169,7 @@ def adicionar_material():
 
 
 def listar_materiais():
-    if len(materiais) == 0:
+    if not materiais:
         print("Nenhum material cadastrado.")
         return
 
@@ -213,12 +204,16 @@ def editar_material():
 
     mostrar_material(material)
     print("\nPressione Enter para manter o valor atual de cada campo.")
+
     material["titulo"] = ler_texto("Título: ", material["titulo"])
-    material["disciplina"] = escolher_opcao("Disciplina:", DISCIPLINAS, material["disciplina"])
+    material["disciplina"] = escolher_opcao(
+        "Disciplina:", DISCIPLINAS, material["disciplina"]
+    )
     material["serie"] = ler_texto("Série: ", material["serie"])
     material["bimestre"] = escolher_opcao("Bimestre:", BIMESTRES, material["bimestre"])
     material["bncc"] = ler_texto("Habilidade BNCC: ", material["bncc"])
     material["conteudo"] = ler_texto("Conteúdo/descrição: ", material["conteudo"])
+
     salvar_dados()
     print("Material atualizado com sucesso!")
 
@@ -240,14 +235,13 @@ def excluir_material():
 
 def gerenciar_materiais():
     while True:
-        print("\n========================================")
-        print("GERENCIAR MATERIAIS")
-        print("========================================")
+        exibir_cabecalho("GERENCIAR MATERIAIS")
         listar_materiais()
         print("\n1 - Visualizar material")
         print("2 - Editar material")
         print("3 - Excluir material")
         print("0 - Voltar")
+
         opcao = input("Escolha uma opção: ").strip()
 
         if opcao == "1":
@@ -265,13 +259,16 @@ def gerenciar_materiais():
 def pesquisar_material():
     termo = ler_texto("Digite o termo de pesquisa: ").lower()
     encontrou = False
+
     for material in materiais:
-        if (termo in material["titulo"].lower()
-                or termo in material["disciplina"].lower()
-                or termo in material["serie"].lower()
-                or termo in material["conteudo"].lower()
-                or termo in material["bncc"].lower()):
-            print("\n[" + str(material["id"]) + "] " + material["titulo"])
+        if (
+            termo in material["titulo"].lower()
+            or termo in material["disciplina"].lower()
+            or termo in material["serie"].lower()
+            or termo in material["conteudo"].lower()
+            or termo in material["bncc"].lower()
+        ):
+            print(f"\n[{material['id']}] {material['titulo']}")
             print("Disciplina:", material["disciplina"])
             print("Série:", material["serie"])
             encontrou = True
@@ -282,45 +279,48 @@ def pesquisar_material():
 
 def gerar_atividade():
     listar_materiais()
-    if len(materiais) == 0:
+    if not materiais:
         return
 
-    material = buscar_material_por_id("Digite o ID do material para gerar uma atividade: ")
+    material = buscar_material_por_id(
+        "Digite o ID do material para gerar uma atividade: "
+    )
     if material is None:
         return
 
     # LISTA de perguntas fixas: não há IA ou geração de respostas.
     perguntas = [
-        'Qual é o tema principal do material "' + material["titulo"] + '"?',
+        f'Qual é o tema principal do material "{material["titulo"]}"?',
         "Escreva três informações que você aprendeu com esse conteúdo.",
         "Explique com suas próprias palavras o assunto estudado.",
-        "Qual parte do conteúdo você considera mais importante? Por quê?"
+        "Qual parte do conteúdo você considera mais importante? Por quê?",
     ]
-    print("\n========================================")
-    print("ATIVIDADE")
-    print("========================================")
+    exibir_cabecalho("ATIVIDADE")
     print("Material:", material["titulo"])
     print("Disciplina:", material["disciplina"])
-    for numero in range(len(perguntas)):
-        print("\n" + str(numero + 1) + ". " + perguntas[numero])
-    print("\n========================================")
+
+    for numero, pergunta in enumerate(perguntas, start=1):
+        print(f"\n{numero}. {pergunta}")
+    print()
+    exibir_separador()
 
 
 def consultar_conteudo():
     termo = ler_texto("Digite um assunto ou palavra que deseja consultar: ").lower()
     encontrou = False
+
     for material in materiais:
         if termo in material["conteudo"].lower():
-            print("\n========================================")
-            print("RESULTADO DA CONSULTA")
-            print("========================================")
+            exibir_cabecalho("RESULTADO DA CONSULTA")
             print("Material:", material["titulo"])
             print("Disciplina:", material["disciplina"])
+
             print("\nConteúdo:")
             print(material["conteudo"])
+
             print("\nFonte:")
-            print(material["titulo"] + " - " + material["disciplina"])
-            print("========================================")
+            print(f"{material['titulo']} - {material['disciplina']}")
+            exibir_separador()
             encontrou = True
 
     if not encontrou:
@@ -331,27 +331,22 @@ def mostrar_resumo():
     # DICIONÁRIOS de contagem, preenchidos a partir da LISTA de materiais.
     por_disciplina = {}
     por_serie = {}
+
     for material in materiais:
         disciplina = material["disciplina"]
         serie = material["serie"]
-        if disciplina not in por_disciplina:
-            por_disciplina[disciplina] = 0
-        por_disciplina[disciplina] += 1
-        if serie not in por_serie:
-            por_serie[serie] = 0
-        por_serie[serie] += 1
+        por_disciplina[disciplina] = por_disciplina.get(disciplina, 0) + 1
+        por_serie[serie] = por_serie.get(serie, 0) + 1
 
-    print("\n========================================")
-    print("RESUMO DA BIBLIOTECA")
-    print("========================================")
+    exibir_cabecalho("RESUMO DA BIBLIOTECA")
     print("Total de materiais:", len(materiais))
     print("\nMateriais por disciplina:")
-    for disciplina in por_disciplina:
-        print(disciplina + ": " + str(por_disciplina[disciplina]))
+    for disciplina, quantidade in por_disciplina.items():
+        print(f"{disciplina}: {quantidade}")
     print("\nMateriais por série:")
-    for serie in por_serie:
-        print(serie + ": " + str(por_serie[serie]))
-    print("========================================")
+    for serie, quantidade in por_serie.items():
+        print(f"{serie}: {quantidade}")
+    exibir_separador()
 
 
 def menu_principal():
@@ -360,9 +355,7 @@ def menu_principal():
 
     # WHILE mantém o sistema aberto até a escolha de 0.
     while True:
-        print("\n========================================")
-        print("        ÁGORA - BIBLIOTECA ESCOLAR")
-        print("========================================")
+        exibir_cabecalho("ÁGORA - BIBLIOTECA ESCOLAR", centralizado=True)
         print("\n1 - Adicionar material")
         print("2 - Gerenciar materiais")
         print("3 - Pesquisar material")
@@ -370,6 +363,7 @@ def menu_principal():
         print("5 - Consultar conteúdo")
         print("6 - Resumo da biblioteca")
         print("0 - Sair")
+
         opcao = input("\nEscolha uma opção: ").strip()
 
         if opcao == "1":
