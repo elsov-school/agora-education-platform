@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "nome": "Paula Mendes",
+    "email": "paula@escola.com",
+    "perfil": "coordenacao",
+    "turmas_lecionadas": [],
+    "ativo": true
+  },
+  {
+    "id": 2,
+    "nome": "Ana Souza",
+    "email": "ana@escola.com",
+    "perfil": "professor",
+    "turmas_lecionadas": ["6A_CIEN", "7B_CIEN"],
+    "ativo": true
+  }
+]
