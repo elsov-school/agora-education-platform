@@ -12,7 +12,20 @@
     "nome": "Ana Souza",
     "email": "ana@escola.com",
     "perfil": "professor",
-    "turmas_lecionadas": ["6A_CIEN", "7B_CIEN"],
+    "turmas_lecionadas": [
+      "6A_CIEN",
+      "7B_CIEN"
+    ],
+    "ativo": true
+  },
+  {
+    "id": 3,
+    "nome": "Carlos Lima",
+    "email": "carlos@escola.com",
+    "perfil": "professor",
+    "turmas_lecionadas": [
+      "8A_MAT"
+    ],
     "ativo": true
   }
 ]
