@@ -12,13 +12,13 @@ Abra `index.html` no navegador com um duplo clique. Não é necessário instalar
 
 ## Publicar na Vercel
 
-O projeto **agora-apresentacao** usa `agora-apresentacao` como **Root Directory**, o preset **Other** e a própria pasta como saída. Não há etapa de build.
+O projeto **agora-html-apresentacao** usa `agora-html-apresentacao` como **Root Directory**, o preset **Other** e a própria pasta como saída. Não há etapa de build.
 
 Para publicar alterações pela CLI, abra o terminal na pasta principal do repositório:
 
 ```bash
-vercel link --yes --project agora-apresentacao --scope lohans-projects-1668e663
+vercel link --yes --project agora-html-apresentacao --scope lohans-projects-1668e663
 vercel deploy --prod --scope lohans-projects-1668e663
 ```
 
-A apresentação é publicada separadamente do site `agora-app`.
+A apresentação é publicada separadamente do site `agora-app-html-demo`.
