@@ -54,12 +54,12 @@ cd agora-education-platform
 
 Também é possível usar **Code → Download ZIP** no GitHub, extrair o arquivo e abrir um terminal na pasta extraída.
 
-Os comandos abaixo partem da **pasta principal do repositório**. Se seu terminal já estiver dentro de `agora-app`, pule o comando `cd agora-app`.
+Os comandos abaixo partem da **pasta principal do repositório**. Se seu terminal já estiver dentro de `agora-app-html-demo`, pule o comando `cd agora-app-html-demo`.
 
 ### 2. Instalar e iniciar — macOS ou Linux
 
 ```bash
-cd agora-app
+cd agora-app-html-demo
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python app.py
@@ -70,7 +70,7 @@ python3 -m venv .venv
 No PowerShell ou no Prompt de Comando:
 
 ```powershell
-cd agora-app
+cd agora-app-html-demo
 py -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe app.py
@@ -88,7 +88,7 @@ Mantenha o terminal aberto enquanto usa a aplicação. Para encerrar o servidor,
 
 ### Próximas execuções
 
-Abra um terminal **dentro de `agora-app`** e execute apenas o comando correspondente:
+Abra um terminal **dentro de `agora-app-html-demo`** e execute apenas o comando correspondente:
 
 **macOS/Linux:**
 
@@ -104,7 +104,7 @@ Abra um terminal **dentro de `agora-app`** e execute apenas o comando correspond
 
 ### Usar no VS Code
 
-Abra a pasta `agora-app` no VS Code, escolha **Terminal → Novo Terminal** e use os comandos acima, pulando `cd agora-app`. A execução pelo terminal não depende de configurar o F5.
+Abra a pasta `agora-app-html-demo` no VS Code, escolha **Terminal → Novo Terminal** e use os comandos acima, pulando `cd agora-app-html-demo`. A execução pelo terminal não depende de configurar o F5.
 
 ### Dados da demonstração
 
@@ -116,9 +116,9 @@ Para voltar aos dados iniciais, encerre o servidor, faça uma cópia do banco se
 
 **Acesse a demonstração:** [agora-app-orcin.vercel.app](https://agora-app-orcin.vercel.app).
 
-O projeto da Vercel usa a pasta **`agora-app`** como **Root Directory** e o framework **Flask**. O arquivo `vercel.json` define o build; `build.py` copia os arquivos de `static/` para `public/static/`, permitindo que a Vercel entregue as imagens, o CSS e o JavaScript.
+O projeto da Vercel usa a pasta **`agora-app-html-demo`** como **Root Directory** e o framework **Flask**. O arquivo `vercel.json` define o build; `build.py` copia os arquivos de `static/` para `public/static/`, permitindo que a Vercel entregue as imagens, o CSS e o JavaScript.
 
-A publicação atual foi feita pela CLI da Vercel. A conexão automática com o repositório GitHub ainda não foi autorizada pela Vercel; novos pushes não publicam o site automaticamente. Para publicar alterações com a CLI, na pasta principal do repositório, vincule o projeto com `vercel link --yes --project agora-app --scope lohans-projects-1668e663` e execute `vercel deploy --prod --scope lohans-projects-1668e663`.
+A publicação atual foi feita pela CLI da Vercel. A conexão automática com o repositório GitHub ainda não foi autorizada pela Vercel; novos pushes não publicam o site automaticamente. Para publicar alterações com a CLI, na pasta principal do repositório, vincule o projeto com `vercel link --yes --project agora-app-html-demo --scope lohans-projects-1668e663` e execute `vercel deploy --prod --scope lohans-projects-1668e663`.
 
 Na Vercel, esta versão funciona em **modo de demonstração**:
 
@@ -135,10 +135,10 @@ Ao executar no seu computador, o banco continua em `data/agora.db` e os dados pe
 
 ## Problemas comuns
 
-- **`No module named flask`:** dentro de `agora-app`, execute novamente o comando de instalação de `requirements.txt` com o Python de `.venv`.
-- **Arquivo não encontrado:** confirme que o terminal está na pasta `agora-app`, onde ficam `app.py` e `requirements.txt`.
+- **`No module named flask`:** dentro de `agora-app-html-demo`, execute novamente o comando de instalação de `requirements.txt` com o Python de `.venv`.
+- **Arquivo não encontrado:** confirme que o terminal está na pasta `agora-app-html-demo`, onde ficam `app.py` e `requirements.txt`.
 - **Python não encontrado:** instale Python 3.9+ e reabra o terminal. No Windows, habilite a opção de adicionar o Python ao PATH durante a instalação.
-- **Porta 5000 ocupada (`Address already in use`):** encerre outro servidor que esteja usando essa porta ou use a porta 5001 com um dos comandos abaixo, dentro de `agora-app`.
+- **Porta 5000 ocupada (`Address already in use`):** encerre outro servidor que esteja usando essa porta ou use a porta 5001 com um dos comandos abaixo, dentro de `agora-app-html-demo`.
 
 **macOS/Linux:**
 
@@ -176,7 +176,7 @@ O acesso é simulado: basta escolher o perfil na tela inicial, sem senha.
 
 ## Testes
 
-Com as dependências instaladas, abra um terminal **dentro de `agora-app`**.
+Com as dependências instaladas, abra um terminal **dentro de `agora-app-html-demo`**.
 
 **macOS/Linux:**
 

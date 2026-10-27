@@ -8,13 +8,13 @@ A Ágora é um projeto acadêmico para organizar, consultar e produzir conteúdo
 
 | Projeto | Onde funciona | O que demonstra | Guia completo |
 | --- | --- | --- | --- |
-| `agora-app/` | Navegador | Biblioteca, atividades, consulta com evidências, verificação de conteúdo, validação e painel | [README da aplicação web](agora-app/README.md) |
+| `agora-app-html-demo/` | Navegador | Biblioteca, atividades, consulta com evidências, verificação de conteúdo, validação e painel | [README da aplicação web](agora-app-html-demo/README.md) |
 | `prototipo-terminal-python/` | Terminal | CRUD de materiais, pesquisa, atividades fixas, consulta e resumo da biblioteca | [README do CRUD em Python](prototipo-terminal-python/README.md) |
-| `agora-apresentacao/` | Navegador | Apresentação do projeto em HTML | [README da apresentação](agora-apresentacao/README.md) |
+| `agora-html-apresentacao/` | Navegador | Apresentação do projeto em HTML | [README da apresentação](agora-html-apresentacao/README.md) |
 
 Para testar o **CRUD simples**, escolha a versão de terminal. Para ver a **interface da plataforma**, escolha a aplicação web. Você pode executar apenas uma delas; os projetos usam dados separados.
 
-Para ver a apresentação, abra `agora-apresentacao/index.html` no navegador. Essa versão não precisa de Python ou instalação de pacotes.
+Para ver a apresentação, abra `agora-html-apresentacao/index.html` no navegador. Essa versão não precisa de Python ou instalação de pacotes.
 
 Os protótipos atuais usam busca textual e geração local. Não precisam de conta em serviço de IA nem de chave de API. A integração com LLMs, embeddings e um pipeline RAG faz parte da proposta de evolução.
 
@@ -75,7 +75,7 @@ Comece na pasta principal do repositório. Se acabou de sair do CRUD e o termina
 ### macOS ou Linux — primeira execução
 
 ```bash
-cd agora-app
+cd agora-app-html-demo
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python app.py
@@ -84,7 +84,7 @@ python3 -m venv .venv
 ### Windows — primeira execução
 
 ```powershell
-cd agora-app
+cd agora-app-html-demo
 py -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe app.py
@@ -101,12 +101,12 @@ Mantenha o terminal aberto enquanto usa o site. Para encerrar o servidor, pressi
 
 ### Executar novamente
 
-Depois da instalação inicial, entre em `agora-app` e use apenas:
+Depois da instalação inicial, entre em `agora-app-html-demo` e use apenas:
 
 - **macOS/Linux:** `.venv/bin/python app.py`
 - **Windows:** `.\.venv\Scripts\python.exe app.py`
 
-O SQLite cria e popula `agora-app/data/agora.db` automaticamente na primeira execução. Esse banco é local e não é enviado ao GitHub.
+O SQLite cria e popula `agora-app-html-demo/data/agora.db` automaticamente na primeira execução. Esse banco é local e não é enviado ao GitHub.
 
 ## Demonstração na Vercel
 
@@ -114,9 +114,9 @@ O SQLite cria e popula `agora-app/data/agora.db` automaticamente na primeira exe
 
 **Abra o site:** [agora-app-orcin.vercel.app](https://agora-app-orcin.vercel.app).
 
-A versão web pode ser publicada na Vercel usando `agora-app` como **Root Directory**. Nessa publicação, os dados são temporários e podem ser reiniciados; para salvar cadastros permanentemente online, é necessário um banco externo. O uso local continua salvando os dados no SQLite normalmente.
+A versão web pode ser publicada na Vercel usando `agora-app-html-demo` como **Root Directory**. Nessa publicação, os dados são temporários e podem ser reiniciados; para salvar cadastros permanentemente online, é necessário um banco externo. O uso local continua salvando os dados no SQLite normalmente.
 
-Consulte a [configuração de publicação](agora-app/README.md#publicação-na-vercel) no guia da aplicação web.
+Consulte a [configuração de publicação](agora-app-html-demo/README.md#publicação-na-vercel) no guia da aplicação web.
 
 ## Estrutura do repositório
 
@@ -124,7 +124,7 @@ Consulte a [configuração de publicação](agora-app/README.md#publicação-na-
 agora-education-platform/
 ├── README.md
 ├── .gitignore
-├── agora-app/
+├── agora-app-html-demo/
 │   ├── README.md
 │   ├── app.py
 │   ├── requirements.txt
@@ -137,7 +137,7 @@ agora-education-platform/
 │   ├── README.md
 │   ├── main.py
 │   └── dados.json
-└── agora-apresentacao/
+└── agora-html-apresentacao/
     ├── README.md
     ├── index.html
     └── vercel.json
@@ -150,9 +150,9 @@ O ambiente `.venv/` e o banco `data/agora.db` são criados localmente durante a 
 | Mensagem ou situação | Como resolver |
 | --- | --- |
 | `python3`, `py` ou `python` não encontrado | Instale Python 3.9+ e reabra o terminal. No Windows, habilite a opção de adicionar o Python ao PATH durante a instalação. |
-| `can't open file`, arquivo não encontrado ou `requirements.txt` não encontrado | Confira a pasta atual: `app.py` fica em `agora-app`; `main.py` fica em `prototipo-terminal-python`. |
-| `No module named flask` | Dentro de `agora-app`, repita o comando de instalação de dependências usando o Python de `.venv`. |
-| Porta 5000 ocupada ou navegador não abre | Consulte a seção de solução de problemas no [guia da aplicação web](agora-app/README.md#problemas-comuns). |
+| `can't open file`, arquivo não encontrado ou `requirements.txt` não encontrado | Confira a pasta atual: `app.py` fica em `agora-app-html-demo`; `main.py` fica em `prototipo-terminal-python`. |
+| `No module named flask` | Dentro de `agora-app-html-demo`, repita o comando de instalação de dependências usando o Python de `.venv`. |
+| Porta 5000 ocupada ou navegador não abre | Consulte a seção de solução de problemas no [guia da aplicação web](agora-app-html-demo/README.md#problemas-comuns). |
 
 ## Proposta e evolução
 
@@ -162,4 +162,4 @@ A aplicação web já demonstra biblioteca, geração local de atividades, consu
 
 Possíveis próximos passos incluem autenticação real, integração com modelos de linguagem, busca por embeddings, ingestão de documentos e exportação de avaliações. Essas funcionalidades não são necessárias para executar os protótipos atuais.
 
-Para os detalhes acadêmicos da versão web, consulte [a descrição das funcionalidades](agora-app/docs/funcionalidades.md).
+Para os detalhes acadêmicos da versão web, consulte [a descrição das funcionalidades](agora-app-html-demo/docs/funcionalidades.md).
