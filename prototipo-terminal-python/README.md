@@ -2,50 +2,60 @@
 
 Execute nesta pasta: `py main.py` (Windows) ou `python3 main.py` (Linux/macOS). Não há dependências externas.
 
-O código existente foi separado por responsabilidade; os novos recursos estão descritos em Markdown, sem implementação. O menu continua oferecendo cadastro, gerenciamento, pesquisa, geração demonstrativa, consulta e resumo. As perguntas são fixas, sem IA. Autenticação, aprovação, persistência de provas e exportação estão planejadas.
-
-## Estrutura e divisão da equipe
-
-| Integrante | Branch | Arquivo principal | Contratos |
-| --- | --- | --- | --- |
-| 1 | `feat/usuarios` | `usuarios.py` | [Usuários](docs/usuarios.md) |
-| 2 | `feat/materiais` | `materiais.py` | [Materiais — CRUD 2](docs/materiais.md) |
-| 3 | `feat/consultas` | `consultas.py` | [Consultas](docs/consultas.md) |
-| 4 | `feat/provas` | `provas.py` | [Provas — CRUD 3](docs/provas.md) |
-| 5 | `feat/padroes-exportacao` | `padroes.py` | [Padrões e exportação](docs/padroes.md) |
-| 6 | `feat/painel-menu` | `painel.py` e `main.py` | [Painel — CRUD 4 e menu](docs/painel.md) |
-
-As seis branches são divisões de trabalho; não representam seis CRUDs. Consultas e padrões apoiam os quatro blocos funcionais das referências.
+Cada CRUD reúne código, documentação e dados na mesma pasta. Consultas, padrões e painel têm documentação e código próprios; não precisam de JSON separado. O painel calcula métricas sobre os outros CRUDs.
 
 ```text
 prototipo-terminal-python/
 ├── main.py
-├── usuarios.py
-├── materiais.py
-├── consultas.py
-├── provas.py
-├── padroes.py
-├── painel.py
-├── dados/
+├── README.md
+├── usuarios/                  # CRUD 1 — feat/usuarios
+│   ├── __init__.py
+│   ├── usuarios.py
+│   ├── README.md
+│   └── usuarios.json
+├── materiais/                 # CRUD 2 — feat/materiais
+│   ├── __init__.py
+│   ├── materiais.py
 │   ├── README.md
 │   └── materiais.json
-├── docs/
-│   ├── usuarios.md
-│   ├── materiais.md
-│   ├── consultas.md
-│   ├── provas.md
-│   ├── padroes.md
-│   └── painel.md
+├── provas/                    # CRUD 3 — feat/provas
+│   ├── __init__.py
+│   ├── provas.py
+│   ├── README.md
+│   └── atividades.json
+├── painel/                    # CRUD 4 — feat/painel-menu
+│   ├── __init__.py
+│   ├── painel.py
+│   └── README.md
+├── consultas/                 # feat/consultas
+│   ├── __init__.py
+│   ├── consultas.py
+│   └── README.md
+├── padroes/                   # feat/padroes-exportacao
+│   ├── __init__.py
+│   ├── padroes.py
+│   └── README.md
 └── exportacoes/
     └── .gitkeep
 ```
 
-`usuarios.py` e `padroes.py` são arquivos reservados. Os demais preservam as funções existentes. `dados/materiais.json` mantém os registros e os campos antigos (`bncc`, `conteudo`); o contrato de evolução está na documentação do CRUD 2. Execute `main.py` para carregar os dados compartilhados antes de usar as operações.
+## Documentação de cada módulo
 
-## Trabalhar nas branches
+- [Usuários e perfis](usuarios/README.md)
+- [Biblioteca curricular — CRUD 2](materiais/README.md)
+- [Provas e atividades](provas/README.md)
+- [Painel e menu](painel/README.md)
+- [Consultas](consultas/README.md)
+- [Padrões e exportação](padroes/README.md)
 
-As branches locais partem da mesma base organizada. Na raiz do repositório, entre na sua com `git switch feat/usuarios`, substituindo pelo nome da tabela. Elas pertencem ao repositório inteiro, embora esta divisão de trabalho seja para a pasta do protótipo. A publicação no remoto é feita separadamente, por exemplo: `git push -u origin feat/usuarios`.
+## O que já funciona
 
-## Dados e comportamento atual
+O menu mantém cadastro, listagem, edição, exclusão, pesquisa de materiais, perguntas fixas, consulta e resumo. Os materiais existentes foram preservados em `materiais/materiais.json`. Os campos atuais ainda são `bncc` e `conteudo`; a evolução está descrita no README do módulo.
 
-As alterações de materiais são gravadas em `dados/materiais.json`. JSON inválido é informado sem sobrescrever o arquivo. Arquivo ausente, vazio ou lista vazia recebe os quatro exemplos na inicialização. A exclusão pede confirmação com `s`. Os códigos BNCC e conteúdos são ilustrativos.
+Os arquivos `usuarios/usuarios.json` e `provas/atividades.json` começam vazios (`[]`), preparados para os CRUDs futuros. As funções planejadas estão documentadas; autenticação, aprovação, persistência de provas e exportação ainda não estão implementadas.
+
+JSON de materiais inválido é informado sem sobrescrever o arquivo. Arquivo ausente, vazio ou lista vazia recebe os quatro exemplos na inicialização. A exclusão pede confirmação com `s`. Conteúdos e códigos BNCC são ilustrativos; não há IA.
+
+## Branches
+
+Na raiz do repositório, use `git switch feat/usuarios`, substituindo pelo nome indicado na árvore. As seis branches locais compartilham esta estrutura organizada como base de desenvolvimento.

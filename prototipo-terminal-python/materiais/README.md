@@ -2,7 +2,7 @@
 
 Branch: `feat/materiais`. Arquivo: `materiais.py`.
 
-Parcialmente implementado em materiais.py. Persistência atual: dados/materiais.json. Campos atuais: id, titulo, disciplina, serie, bimestre, bncc, conteudo. Evolução prevista: tipo (apostila, capitulo ou plano_aula), habilidade_bncc, conteudo_texto, status_validacao (pendente ou aprovado_coordenacao), autor_upload. A migração de bncc/conteudo e o preenchimento dos novos campos ainda não foram feitos.
+Parcialmente implementado em materiais.py. Persistência atual: materiais/materiais.json. Campos atuais: id, titulo, disciplina, serie, bimestre, bncc, conteudo. Evolução prevista: tipo (apostila, capitulo ou plano_aula), habilidade_bncc, conteudo_texto, status_validacao (pendente ou aprovado_coordenacao), autor_upload. A migração de bncc/conteudo e o preenchimento dos novos campos ainda não foram feitos.
 
 ## Funções e comportamento esperado
 

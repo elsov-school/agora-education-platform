@@ -1,7 +1,7 @@
-from materiais import carregar_dados, adicionar_material, gerenciar_materiais
-from consultas import pesquisar_material, consultar_conteudo
-from provas import gerar_atividade
-from painel import mostrar_resumo
+from materiais.materiais import carregar_dados, adicionar_material, gerenciar_materiais
+from consultas.consultas import pesquisar_material, consultar_conteudo
+from provas.provas import gerar_atividade
+from painel.painel import mostrar_resumo
 
 
 def menu_principal():

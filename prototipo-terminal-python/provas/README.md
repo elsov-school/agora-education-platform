@@ -2,7 +2,7 @@
 
 Branch: `feat/provas`. Arquivo: `provas.py`.
 
-Somente a geração demonstrativa existe. Persistência futura: dados/atividades.json. Campos: id, professor_id, serie, disciplina, bimestre, materiais_referenciados, questoes, data_criacao, modelo_padrao. Cada questão terá enunciado, tipo, dificuldade, gabarito e criterio_correcao. Modelo inicial previsto: institucional_v1.
+Somente a geração demonstrativa existe. Arquivo reservado para persistência futura: provas/atividades.json. Campos: id, professor_id, serie, disciplina, bimestre, materiais_referenciados, questoes, data_criacao, modelo_padrao. Cada questão terá enunciado, tipo, dificuldade, gabarito e criterio_correcao. Modelo inicial previsto: institucional_v1.
 
 ## Funções e comportamento esperado
 
@@ -29,3 +29,5 @@ Planejado: remover avaliação após confirmar autoria e exclusão.
 ### `exportar_prova(atividade_id, destino)`
 
 Planejado: encaminhar avaliação e padrão institucional ao módulo padroes, retornando caminho gerado.
+
+O JSON desta pasta começa com uma lista vazia (`[]`). As operações planejadas ainda não o utilizam.

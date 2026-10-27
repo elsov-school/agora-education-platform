@@ -22,7 +22,7 @@ DISCIPLINAS = (
 materiais = []
 
 # O JSON fica sempre na mesma pasta deste programa.
-ARQUIVO_DADOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dados", "materiais.json")
+ARQUIVO_DADOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "materiais.json")
 
 
 def materiais_exemplo():

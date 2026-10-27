@@ -1,5 +1,5 @@
-"""Funcionalidades existentes; evoluções descritas em docs/painel.md."""
-import materiais as biblioteca
+"""Funcionalidades existentes; evoluções descritas em painel/README.md."""
+from materiais import materiais as biblioteca
 
 
 def mostrar_resumo ():

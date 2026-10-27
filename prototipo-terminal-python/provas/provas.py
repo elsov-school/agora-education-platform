@@ -1,5 +1,5 @@
-"""Funcionalidades existentes; evoluções descritas em docs/provas.md."""
-import materiais as biblioteca
+"""Funcionalidades existentes; evoluções descritas em provas/README.md."""
+from materiais import materiais as biblioteca
 
 
 def gerar_atividade ():

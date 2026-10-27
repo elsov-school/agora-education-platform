@@ -1,5 +1,5 @@
-"""Funcionalidades existentes; evoluções descritas em docs/consultas.md."""
-import materiais as biblioteca
+"""Funcionalidades existentes; evoluções descritas em consultas/README.md."""
+from materiais import materiais as biblioteca
 
 
 def pesquisar_material ():

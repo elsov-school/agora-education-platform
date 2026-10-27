@@ -2,7 +2,7 @@
 
 Branch: `feat/usuarios`. Arquivo: `usuarios.py`.
 
-Planejado. Persistência futura: dados/usuarios.json. Campos: id, nome, email, perfil (coordenacao ou professor), turmas_lecionadas e ativo. O campo ativo permite desativação sem apagar o histórico.
+Planejado. Arquivo reservado para persistência futura: usuarios/usuarios.json. Campos: id, nome, email, perfil (coordenacao ou professor), turmas_lecionadas e ativo. O campo ativo permite desativação sem apagar o histórico.
 
 ## Funções e comportamento esperado
 
@@ -25,3 +25,5 @@ Marcar usuário como inativo, preservando referências das provas.
 ### `verificar_permissao(usuario_id, acao)`
 
 Conferir perfil e estado ativo. Coordenação gerencia usuários, aprova materiais e acessa métricas; professores acessam conteúdos aprovados e suas atividades.
+
+O JSON desta pasta começa com uma lista vazia (`[]`). As operações planejadas ainda não o utilizam.
