@@ -24,8 +24,9 @@
     "email": "carlos@escola.com",
     "perfil": "professor",
     "turmas_lecionadas": [
-      "8A_MAT"
+      "8A_MAT",
+      "9A_MAT"
     ],
-    "ativo": true
+    "ativo": false
   }
 ]
