@@ -147,6 +147,14 @@ def ler_turmas():
     return texto.split(",")
 
 
+def ler_id(pergunta):
+    """Pede um ID no terminal e garante que é um número inteiro."""
+    valor = input(pergunta).strip()
+    if not valor.isdigit():
+        raise ValueError("O ID deve ser um número inteiro (ex: 3).")
+    return int(valor)
+
+
 def mostrar_professores(professores):
     """Exibe uma lista de professores no terminal."""
     if not professores:
@@ -182,11 +190,11 @@ def gerenciar_usuarios():
             elif opcao == "3":
                 mostrar_professores(listar_professores(incluir_inativos=True))
             elif opcao == "4":
-                usuario_id = int(input("ID do professor: "))
+                usuario_id = ler_id("ID do professor: ")
                 professor = atualizar_turmas(usuario_id, ler_turmas())
                 print(f"Turmas de '{professor['nome']}' atualizadas.")
             elif opcao == "5":
-                usuario_id = int(input("ID do usuário: "))
+                usuario_id = ler_id("ID do usuário: ")
                 usuario = desativar_usuario(usuario_id)
                 print(f"Usuário '{usuario['nome']}' desativado.")
             elif opcao == "0":
