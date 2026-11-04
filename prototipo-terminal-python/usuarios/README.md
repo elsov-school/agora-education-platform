@@ -27,3 +27,7 @@ Marcar usuário como inativo, preservando referências das provas.
 Conferir perfil e estado ativo. Coordenação gerencia usuários, aprova materiais e acessa métricas; professores acessam conteúdos aprovados e suas atividades.
 
 O JSON desta pasta começa com uma lista vazia (`[]`). As operações planejadas ainda não o utilizam.
+
+## Trabalho integrado do remoto
+
+Esta branch preserva carregar_usuarios(), salvar_usuarios(), gerar_novo_id() e cadastrar_usuario(), além dos três usuários de demonstração já cadastrados. O JSON é lido na pasta deste módulo. As demais funções do contrato seguem planejadas.
