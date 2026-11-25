@@ -4,12 +4,12 @@ O protótipo reúne a biblioteca curricular, consultas com evidência, provas e 
 
 ## Entrega contrato v1
 
-O programa carrega a biblioteca e abre o login. No cadastro de demonstração, Paula Mendes (ID 1) representa a coordenação e Ana Souza (ID 2) é professora. O perfil e as atribuições vêm do cadastro. A opção **9** volta ao login e **0** encerra o programa nos menus de perfil.
+O programa carrega a biblioteca e pede o ID ou e-mail de um usuário ativo. O login é demonstrativo, sem senha. No cadastro de demonstração, Paula Mendes (ID 1) representa a coordenação e Ana Souza (ID 2) é professora. O perfil e as atribuições vêm do cadastro. A opção **9** volta ao login e **0** encerra o programa nos menus de perfil.
 
 | Perfil | Operações do menu |
 | --- | --- |
 | Coordenação | Gerenciar professores e atribuições, manter a biblioteca, aprovar pendências, configurar o padrão da escola, consultar métricas e acessar o histórico de provas |
-| Professor | Pesquisar a biblioteca permitida, sugerir um material, consultar conteúdo com evidência, gerar e revisar provas, acessar o próprio histórico e exportar |
+| Professor | Abrir ou pesquisar a biblioteca permitida, sugerir e editar materiais próprios, consultar conteúdo com evidência, gerar e revisar provas, acessar o próprio histórico e exportar |
 
 ### Roteiro para demonstração
 
@@ -35,6 +35,8 @@ Materiais antigos sem aprovação integram a fila de pendências. O conteúdo de
 
 ### Verificação
 
-Execute `python -m unittest discover -s tests -v` a partir da pasta do protótipo. Os testes do painel usam JSONs temporários. Os testes de navegação verificam a troca de perfil e o encaminhamento da sessão às funções dos módulos.
+A partir da pasta do protótipo, execute `python -B -m unittest discover -s tests -v`.
 
-A execução do roteiro completo depende da integração das cinco branches com as APIs do contrato v1. Esta entrega inicial liga os menus a essas APIs.
+O teste de ponta a ponta em `tests/test_integracao.py` executa o `main.py` em processos separados sobre uma cópia temporária. Cadastra dois professores, configura a escola, sugere e aprova material, consulta um trecho, revisa e salva uma prova, confere a autoria e os arquivos exportados e verifica as métricas após reiniciar. Nesse cenário, a consulta e a prova salva somam dois usos do material. O painel preserva o conteúdo dos JSONs.
+
+O teste pode ser executado separadamente com `python -B -m unittest discover -s tests -p test_integracao.py -k TestEscolaTemporaria -v`.
