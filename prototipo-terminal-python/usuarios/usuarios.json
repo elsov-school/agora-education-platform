@@ -5,7 +5,8 @@
     "email": "paula@escola.com",
     "perfil": "coordenacao",
     "turmas_lecionadas": [],
-    "ativo": true
+    "ativo": true,
+    "atribuicoes": []
   },
   {
     "id": 2,
@@ -16,7 +17,19 @@
       "6A_CIEN",
       "7B_CIEN"
     ],
-    "ativo": true
+    "ativo": true,
+    "atribuicoes": [
+      {
+        "turma": "6A",
+        "serie": "6º ano",
+        "disciplina": "Ciências"
+      },
+      {
+        "turma": "7B",
+        "serie": "7º ano",
+        "disciplina": "Ciências"
+      }
+    ]
   },
   {
     "id": 3,
@@ -27,6 +40,18 @@
       "8A_MAT",
       "9A_MAT"
     ],
-    "ativo": false
+    "ativo": false,
+    "atribuicoes": [
+      {
+        "turma": "8A",
+        "serie": "8º ano",
+        "disciplina": "Matemática"
+      },
+      {
+        "turma": "9A",
+        "serie": "9º ano",
+        "disciplina": "Matemática"
+      }
+    ]
   }
 ]
