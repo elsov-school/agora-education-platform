@@ -27,7 +27,11 @@ class TestPadroes(unittest.TestCase):
         self.regras = {"nome_escola": "Escola Ipê", "max_questoes": 2,
                        "instrucoes": "Responda a lápis."}
         self.arquivo.write_text(json.dumps(self.regras, ensure_ascii=False), encoding="utf-8")
-        self.coordenacao = {"id": 1, "perfil": "coordenacao", "ativo": True}
+        self.coordenacao = {
+            "id": 1, "nome": "Coordenação de teste", "email": "coord@example.test",
+            "perfil": "coordenacao", "ativo": True,
+            "turmas_lecionadas": [], "atribuicoes": [],
+        }
         self.cadastro = pasta / "usuarios.json"
         self.cadastro.write_text(json.dumps([self.coordenacao]), encoding="utf-8")
         usuarios = patch.object(modulo.usuarios, "ARQUIVO_USUARIOS", str(self.cadastro))
@@ -60,19 +64,20 @@ class TestPadroes(unittest.TestCase):
     def test_apenas_coordenacao_ativa_pode_configurar(self):
         anterior = self.arquivo.read_bytes()
         for usuario in (None, {}, {"perfil": "coordenacao"},
-                        {"perfil": "coordenacao", "ativo": False},
-                        {"perfil": "coordenacao", "ativo": "false"},
-                        {"perfil": "professor", "ativo": True}):
+                        dict(self.coordenacao, ativo=False),
+                        dict(self.coordenacao, ativo="false"),
+                        dict(self.coordenacao, perfil="professor")):
             with self.subTest(usuario=usuario):
                 self.assertIsNone(self.configurar(usuario, []))
                 self.assertEqual(self.arquivo.read_bytes(), anterior)
 
     def test_sessao_antiga_perde_acesso_apos_desativacao_ou_mudanca_de_perfil(self):
         anterior = self.arquivo.read_bytes()
-        for cadastro in ([], [{"id": 1, "perfil": "coordenacao", "ativo": False}],
-                         [{"id": 1, "perfil": "professor", "ativo": True}]):
+        for cadastro in ([], [dict(self.coordenacao, ativo=False)],
+                         [dict(self.coordenacao, perfil="professor")]):
             with self.subTest(cadastro=cadastro):
                 self.cadastro.write_text(json.dumps(cadastro), encoding="utf-8")
+                self.assertEqual(modulo.usuarios.carregar_usuarios(), cadastro)
                 self.assertIsNone(self.configurar(self.coordenacao, []))
                 self.assertEqual(self.arquivo.read_bytes(), anterior)
 
@@ -129,6 +134,7 @@ class TestPadroes(unittest.TestCase):
         caminhos = padroes.exportar_prova_formatada(self.prova)
         anteriores = [Path(c).read_bytes() for c in caminhos]
         self.configurar(self.coordenacao, ["", "1", ""])
+        self.assertEqual(padroes.carregar_regras()["max_questoes"], 1)
         with self.assertRaisesRegex(ValueError, "limite de 1"):
             padroes.exportar_prova_formatada(self.prova)
         self.assertEqual([Path(c).read_bytes() for c in caminhos], anteriores)
