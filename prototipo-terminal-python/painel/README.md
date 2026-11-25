@@ -1,60 +1,35 @@
-# CRUD 4 — Painel da Coordenação & Métricas
+# Painel da coordenação e menus
 
-Branch: `feat/painel-menu`. Arquivos: `painel.py` e `main.py` (opção 7). Responsáveis: Paulo e Leo.
+## Entrega contrato v1
 
-O painel não tem JSON próprio: todas as métricas são consultas e agregações feitas, **somente leitura**, sobre os outros CRUDs.
+Entre como coordenação em `py main.py`, escolha **5 — Painel de métricas** e **5 — Painel completo** para ver todas as seções. Para executar apenas o painel, use `py -m painel.painel` a partir da pasta do protótipo e informe um ID de coordenação ativa. No Linux/macOS, use `python3`.
 
-| Fonte | CRUD | Uso no painel |
-| --- | --- | --- |
-| `usuarios/usuarios.json` | 1 — Usuários | nomes dos professores e permissão `acessar_metricas` |
-| `materiais/materiais.json` | 2 — Materiais | títulos e `status_validacao` |
-| `provas/atividades.json` | 3 — Provas | `professor_id`, `disciplina` e `materiais_referenciados` |
+| Métrica | Como é calculada |
+| --- | --- |
+| Biblioteca e fila | Total de materiais, aprovados e pendentes, distribuição por disciplina e série. Um registro anterior ao campo `status_validacao` entra na fila por ID. |
+| Provas por professor | Conta cada registro em `provas/atividades.json`. Professores ativos sem provas aparecem com zero. O histórico preserva autores inativos ou ausentes do cadastro. |
+| Provas por série e disciplina | Usa a série e a disciplina gravadas na prova. Os percentuais tomam o total de provas como denominador. |
+| Três materiais mais usados | Usa o contador `usos` do material. Mostra até três com uso positivo, com desempate por título e ID. |
+| Citações nas provas | Conta cada material uma vez por prova, mesmo com ID repetido. Referências históricas a materiais removidos continuam na contagem. |
 
-O acesso é restrito à coordenação: o menu pede o ID do usuário e usa `verificar_permissao(usuario_id, "acessar_metricas")` do CRUD 1. Nos dados de demonstração, o ID 1 (Paula Mendes) é da coordenação.
+O painel relê os JSONs necessários a cada escolha. Se uma fonte estiver ilegível, a tela informa o erro e permite voltar. As telas de métricas abrem os arquivos apenas para leitura. A coordenação aprova materiais em **Aprovar materiais pendentes** ou no menu da biblioteca.
 
-## Como executar
+### APIs
 
-Na pasta `prototipo-terminal-python`:
+- `main.menu_principal()` carrega os dados, solicita login e encaminha a sessão.
+- `main.menu_coordenacao(usuario)` e `main.menu_professor(usuario)` abrem os menus por perfil. A opção **9** troca o usuário e **0** encerra o programa.
+- `menu_painel(usuario=None)` recebe a sessão ou solicita ID na execução isolada. A permissão exigida é `acessar_metricas`.
+- `contar_atividades_por_professor(atividades)`, `contar_atividades_por_serie(atividades)` e `contar_atividades_por_disciplina(atividades)` retornam dicionários de contagem.
+- `listar_materiais_mais_usados(materiais)` e `listar_materiais_mais_citados(atividades, materiais)` retornam listas de tuplas `(id, titulo, total)`.
+- `listar_materiais_pendentes(materiais)` retorna a fila. `mostrar_resumo()` e `mostrar_painel_completo(atividades)` continuam disponíveis para quem já carregou a biblioteca.
 
-- Programa completo: `py main.py` (Windows) ou `python3 main.py` → opção **7 - Painel da coordenação**.
-- Só o painel: `py -m painel.painel` ou `python3 -m painel.painel`.
-- Testes: `py -m unittest painel.teste_painel` ou `python3 -m unittest painel.teste_painel`.
+### Testes
 
-## Funções e comportamento
+Execute os comandos na pasta `prototipo-terminal-python`.
 
-### `contar_atividades_por_professor(atividades)`
+```sh
+python -m unittest discover -s tests -p "test_painel.py" -v
+python -m unittest discover -s tests -p "test_integracao.py" -v
+```
 
-Implementado. Agrupa as atividades por `professor_id` e devolve um dicionário `{professor_id: total}`. Na tela, os IDs viram nomes; professores ativos sem atividades aparecem com 0, e professores desativados continuam contando, marcados como "(inativo)", porque o histórico é preservado.
-
-### `contar_atividades_por_disciplina(atividades)`
-
-Implementado. Agrupa as atividades por disciplina e devolve `{disciplina: total}`. A tela mostra o total e o percentual de cada disciplina, do maior para o menor.
-
-### `listar_materiais_mais_citados(atividades, materiais)`
-
-Implementado. Conta em quantas atividades cada material aparece em `materiais_referenciados` e devolve uma lista de tuplas `(material_id, titulo, total)`, da mais citada para a menos citada; empates ficam em ordem alfabética. Um material repetido na mesma atividade conta uma única vez. Uma referência a um material que foi excluído aparece como "(material removido da biblioteca)". As consultas só vão entrar nesta métrica quando o módulo de consultas passar a registrar o uso.
-
-### `listar_materiais_pendentes(materiais)`
-
-Implementado. Devolve a fila de materiais com `status_validacao == "pendente"`, em ordem de cadastro (ID). Materiais sem esse campo, que foram cadastrados antes da evolução do CRUD 2, ainda não foram validados e por isso também entram na fila. A aprovação em si é feita por `aprovar_material()` no CRUD 2; o painel só mostra a fila.
-
-### `mostrar_resumo()`
-
-Existente: total de materiais e contagem por disciplina e série. Continua disponível na opção 6 do menu principal e dentro do painel.
-
-### `menu_painel()`
-
-Implementado. Confere a permissão e abre o submenu: atividades por professor, atividades por disciplina, materiais mais citados, fila de pendentes, painel completo (indicadores e todas as seções juntas) e resumo da biblioteca. As atividades são relidas a cada escolha, então o painel sempre mostra os dados atuais.
-
-### Funções de apoio
-
-- `ler_atividades()`: lê `provas/atividades.json` sem alterá-lo. Arquivo ausente, vazio ou inválido devolve `[]`; no caso de JSON inválido, também mostra um aviso.
-- `ler_usuarios_por_id()`: dicionário `{id: usuário}` montado a partir de `carregar_usuarios()`.
-- `mostrar_*()`: telas do terminal. As funções do contrato acima não usam `input` nem `print`, por isso são testadas isoladamente em `teste_painel.py`.
-
-## Estruturas de dados usadas
-
-- **Dicionários:** contagens por professor e por disciplina, mapa de usuários por ID e mapa de títulos.
-- **Listas:** atividades, materiais, ranking e fila de pendentes.
-- **Tuplas:** itens do ranking `(material_id, titulo, total)`, linhas `(nome, total)` e a tupla fixa `STATUS_VALIDACAO`.
-- **Conjunto:** elimina IDs de materiais repetidos dentro da mesma atividade.
+O teste de ponta a ponta inicia o terminal com os seis módulos reais em uma escola temporária. Ele verifica que uma pesquisa preserva o contador, que a consulta e a prova salva somam dois usos e que exportação e leitura do painel preservam essa contagem. Os testes específicos do painel também cobrem empates, referências históricas, JSON inválido e perda de permissão enquanto o menu aguarda uma escolha.

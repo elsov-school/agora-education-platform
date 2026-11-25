@@ -6,7 +6,13 @@
         "serie": "6º ano",
         "bimestre": "1º Bimestre",
         "bncc": "EF06CI01",
-        "conteudo": "O Sistema Solar é formado pelo Sol, oito planetas e outros corpos celestes. A Terra é um dos planetas e gira ao redor do Sol."
+        "conteudo": "O Sistema Solar é formado pelo Sol, oito planetas e outros corpos celestes. A Terra é um dos planetas e gira ao redor do Sol.",
+        "habilidade_bncc": "EF06CI01",
+        "conteudo_texto": "O Sistema Solar é formado pelo Sol, oito planetas e outros corpos celestes. A Terra é um dos planetas e gira ao redor do Sol.",
+        "tipo": "capitulo",
+        "autor_upload": null,
+        "status_validacao": "pendente",
+        "usos": 0
     },
     {
         "id": 2,
@@ -15,7 +21,13 @@
         "serie": "6º ano",
         "bimestre": "2º Bimestre",
         "bncc": "EF06CI05",
-        "conteudo": "A célula é a unidade básica dos seres vivos. A membrana envolve a célula, e o citoplasma abriga estruturas que participam de suas funções."
+        "conteudo": "A célula é a unidade básica dos seres vivos. A membrana envolve a célula, e o citoplasma abriga estruturas que participam de suas funções.",
+        "habilidade_bncc": "EF06CI05",
+        "conteudo_texto": "A célula é a unidade básica dos seres vivos. A membrana envolve a célula, e o citoplasma abriga estruturas que participam de suas funções.",
+        "tipo": "capitulo",
+        "autor_upload": null,
+        "status_validacao": "pendente",
+        "usos": 0
     },
     {
         "id": 3,
@@ -24,7 +36,13 @@
         "serie": "7º ano",
         "bimestre": "3º Bimestre",
         "bncc": "EF07MA18",
-        "conteudo": "Uma equação do primeiro grau contém uma incógnita elevada à primeira potência. Para resolver x + 3 = 7, subtraímos 3 dos dois lados e encontramos x = 4."
+        "conteudo": "Uma equação do primeiro grau contém uma incógnita elevada à primeira potência. Para resolver x + 3 = 7, subtraímos 3 dos dois lados e encontramos x = 4.",
+        "habilidade_bncc": "EF07MA18",
+        "conteudo_texto": "Uma equação do primeiro grau contém uma incógnita elevada à primeira potência. Para resolver x + 3 = 7, subtraímos 3 dos dois lados e encontramos x = 4.",
+        "tipo": "capitulo",
+        "autor_upload": null,
+        "status_validacao": "pendente",
+        "usos": 0
     },
     {
         "id": 4,
@@ -33,6 +51,12 @@
         "serie": "6º ano",
         "bimestre": "4º Bimestre",
         "bncc": "EF06LP01",
-        "conteudo": "Os gêneros textuais são formas de organizar textos conforme sua finalidade. Notícias informam acontecimentos, receitas orientam o preparo de alimentos e contos apresentam histórias."
+        "conteudo": "Os gêneros textuais são formas de organizar textos conforme sua finalidade. Notícias informam acontecimentos, receitas orientam o preparo de alimentos e contos apresentam histórias.",
+        "habilidade_bncc": "EF06LP01",
+        "conteudo_texto": "Os gêneros textuais são formas de organizar textos conforme sua finalidade. Notícias informam acontecimentos, receitas orientam o preparo de alimentos e contos apresentam histórias.",
+        "tipo": "capitulo",
+        "autor_upload": null,
+        "status_validacao": "pendente",
+        "usos": 0
     }
 ]
