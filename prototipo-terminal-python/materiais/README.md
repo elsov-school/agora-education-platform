@@ -1,67 +1,40 @@
-# CRUD 2 — Biblioteca curricular
+# Módulo 2 — Biblioteca curricular
 
-Branch: `feat/materiais`. Arquivo: `materiais.py`.
+## Entrega contrato v1
 
-Parcialmente implementado em materiais.py. Persistência atual: materiais/materiais.json. Campos atuais: id, titulo, disciplina, serie, bimestre, bncc, conteudo. Evolução prevista: tipo (apostila, capitulo ou plano_aula), habilidade_bncc, conteudo_texto, status_validacao (pendente ou aprovado_coordenacao), autor_upload. A migração de bncc/conteudo e o preenchimento dos novos campos ainda não foram feitos.
+A coordenação pode cadastrar, consultar, editar, aprovar e excluir materiais. Um cadastro da coordenação já entra como `aprovado_coordenacao`. O professor sugere material para revisão. Na biblioteca, ele vê os aprovados que correspondem às suas atribuições de série e disciplina, incluindo a turma quando o material a especifica. Pode editar um material visível de sua autoria. A edição devolve o material à fila de aprovação.
 
-## Funções e comportamento esperado
+### Operações
 
-### `materiais_exemplo()`
+| Função | Comportamento |
+| --- | --- |
+| `gerenciar_materiais(usuario=None)` | Abre o menu da biblioteca com as ações do perfil ativo. |
+| `adicionar_material(usuario=None)` | Pede título, disciplina, série, bimestre, BNCC, conteúdo, tipo e turma opcional. Registra o ID da sessão como autor e inicia o contador em zero. |
+| `listar_materiais(usuario=None)`, `visualizar_material(usuario=None)` | Aplicam o mesmo filtro à listagem e à seleção por ID. Usam `usuarios.filtrar_materiais_do_professor` para professores. |
+| `editar_material(usuario=None)` | Enter mantém um campo. Um hífen no campo turma remove a restrição de turma. Mantém ID, autoria e usos. |
+| `aprovar_materiais_pendentes(usuario)` | Apresenta a fila à coordenação. Exibe o conteúdo do ID escolhido e pede confirmação antes de aprovar. |
+| `excluir_material(usuario=None)` | Exige confirmação da coordenação e verifica `provas/atividades.json`. Bloqueia a exclusão se uma prova referencia o ID ou se o histórico está ausente ou ilegível. |
+| `registrar_uso(material_id)` | Reabre o JSON, incrementa um uso e atualiza a lista compartilhada. Retorna `True` quando grava. Consultas e provas chamam essa função após uma consulta respondida ou uma prova salva. |
+| `carregar_dados()`, `salvar_dados()` | Operações de persistência sobre a lista compartilhada `materiais`. Retornam `True` em caso de sucesso. A lista mantém sua identidade para quem a importou. |
 
-Existente: devolver quatro materiais ilustrativos.
+As operações interativas recebem o dicionário da sessão. Sessões ausentes, inativas ou com perfil desconhecido não podem operar na biblioteca.
 
-### `carregar_dados()`
+### Migração do acervo
 
-Existente: carregar JSON; inicializar exemplos se ausente ou vazio; recusar JSON inválido.
+`materiais.json` é a fonte de dados. Na primeira leitura de registros antigos, o módulo mantém IDs, títulos, campos extras e textos originais. Aceita os pares `bncc` e `habilidade_bncc`, `conteudo` e `conteudo_texto`, preenchendo o nome ausente com o valor existente. Se os dois nomes contêm valores divergentes, a leitura informa o registro que precisa de revisão e preserva o arquivo.
 
-### `salvar_dados()`
+Para os quatro registros antigos, o tipo inicial é `capitulo`, a autoria desconhecida fica como `null`, o status é `pendente` e o contador começa em zero. Os tipos disponíveis no cadastro são `apostila`, `capitulo` e `plano_aula`. A ausência de turma indica material aplicável a todas as turmas daquela série e disciplina.
 
-Existente: persistir a lista em UTF-8.
+Uma biblioteca ausente é inicializada com os quatro exemplos. A lista vazia `[]` continua vazia após reiniciar. Um arquivo truncado, JSON inválido ou registro inconsistente gera uma mensagem e permanece disponível para recuperação. O contador relê a versão mais recente a cada tentativa. A edição informa quando outra operação modificou a biblioteca durante o preenchimento.
 
-### `ler_texto(pergunta, valor_atual="")`
+Cada gravação usa `materiais.json.tmp` na mesma pasta e substitui o original ao terminar. Se o processo for encerrado à força durante a gravação, esse temporário pode permanecer. Nesse caso, feche as instâncias do protótipo e remova apenas o temporário antes de repetir a operação.
 
-Existente: solicitar texto obrigatório; permitir manter valor na edição.
+### Testes
 
-### `escolher_opcao(titulo, opcoes, valor_atual="")`
+Na pasta `prototipo-terminal-python`, execute:
 
-Existente: validar seleção numérica de opções fixas.
+```console
+py -m unittest discover -s tests -p "test_materiais.py" -v
+```
 
-### `buscar_material_por_id(pergunta="ID: ")`
-
-Existente: ler ID e localizar material, informando erros.
-
-### `adicionar_material()`
-
-Existente: ler campos, gerar ID e salvar. Futuro: registrar autor, tipo e status pendente.
-
-### `listar_materiais()`
-
-Existente: mostrar ID, título, disciplina e série.
-
-### `mostrar_material(material)`
-
-Existente: mostrar todos os campos atuais.
-
-### `visualizar_material()`
-
-Existente: localizar e exibir material.
-
-### `editar_material()`
-
-Existente: editar campos e salvar. Futuro: validar permissão e definir necessidade de nova aprovação.
-
-### `excluir_material()`
-
-Existente: excluir após confirmação. Futuro: impedir perda de referências em atividades.
-
-### `gerenciar_materiais()`
-
-Existente: submenu de visualização, edição e exclusão.
-
-### `aprovar_material(material_id, coordenador_id)`
-
-Planejado: verificar perfil e aprovar conteúdo pendente.
-
-### `buscar_materiais(habilidade_bncc=None, serie=None)`
-
-Planejado: filtrar por BNCC e/ou série, restringindo professores a materiais aprovados.
+Os testes usam arquivos temporários para verificar migração, cadastros, aprovação, permissões, referências de provas, disputa entre gravações e contagem de usos. Nos testes da tela do professor, uma lista simulada representa a resposta do filtro do módulo de usuários.
