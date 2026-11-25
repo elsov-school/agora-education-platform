@@ -1,7 +1,7 @@
 from materiais.materiais import carregar_dados, adicionar_material, gerenciar_materiais
 from consultas.consultas import pesquisar_material, consultar_conteudo
 from provas.provas import gerar_atividade
-from painel.painel import mostrar_resumo
+from painel.painel import mostrar_resumo, menu_painel
 
 
 def menu_principal():
@@ -19,6 +19,7 @@ def menu_principal():
         print("4 - Gerar atividade")
         print("5 - Consultar conteúdo")
         print("6 - Resumo da biblioteca")
+        print("7 - Painel da coordenação")
         print("0 - Sair")
         opcao = input("\nEscolha uma opção: ").strip()
 
@@ -34,6 +35,8 @@ def menu_principal():
             consultar_conteudo()
         elif opcao == "6":
             mostrar_resumo()
+        elif opcao == "7":
+            menu_painel()
         elif opcao == "0":
             print("Até logo!")
             break
