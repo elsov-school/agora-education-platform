@@ -2,7 +2,7 @@ import io
 import json
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import ExitStack, redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
@@ -11,6 +11,8 @@ from painel import painel
 
 class TestPainel(unittest.TestCase):
     def setUp(self):
+        self.patches = ExitStack()
+        self.addCleanup(self.patches.close)
         pasta = tempfile.TemporaryDirectory()
         self.addCleanup(pasta.cleanup)
         self.pasta = Path(pasta.name)
@@ -28,7 +30,7 @@ class TestPainel(unittest.TestCase):
             (painel.biblioteca, "ARQUIVO_DADOS", self.biblioteca),
             (painel.cadastro, "ARQUIVO_USUARIOS", self.cadastro)
         ):
-            self.enterContext(patch.object(modulo, atributo, str(caminho)))
+            self.patches.enter_context(patch.object(modulo, atributo, str(caminho)))
 
     def gravar(self, caminho, registros):
         caminho.write_text(json.dumps(registros, ensure_ascii=False), encoding="utf-8")
@@ -99,3 +101,12 @@ class TestPainel(unittest.TestCase):
         self.assertIn("Acesso negado", self.abrir_painel([], dict(self.coord, perfil="professor")))
         self.gravar(self.cadastro, [dict(self.coord, ativo=False)])
         self.assertIn("Acesso negado", self.abrir_painel([], self.coord))
+
+    def test_revoga_acesso_enquanto_painel_aguarda_escolha(self):
+        def desativar(pergunta):
+            self.gravar(self.cadastro, [dict(self.coord, ativo=False)])
+            return "5"
+
+        saida = self.abrir_painel(desativar, self.coord)
+        self.assertIn("Acesso negado", saida)
+        self.assertNotIn("Professores ativos:", saida)

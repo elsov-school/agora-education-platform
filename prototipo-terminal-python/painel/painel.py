@@ -48,7 +48,7 @@ def ler_atividades():
 def ler_usuarios_por_id():
     """DICIONÁRIO {id: usuário}, montado a partir do CRUD de usuários."""
     usuarios_por_id = {}
-    for usuario in ler_lista(cadastro.ARQUIVO_USUARIOS):
+    for usuario in cadastro.carregar_usuarios():
         usuarios_por_id[usuario["id"]] = usuario
     return usuarios_por_id
 
@@ -324,15 +324,11 @@ def menu_painel(usuario=None):
         print("Acesso negado: o painel é exclusivo da coordenação ativa.")
         return
 
-    while True:
-        try:
-            if not cadastro.verificar_permissao(usuario_id, "acessar_metricas"):
-                print("Acesso negado: o painel é exclusivo da coordenação ativa.")
-                return
-        except (OSError, ValueError) as erro:
-            print("Não foi possível verificar a permissão:", erro)
-            return
+    if not cadastro.verificar_permissao(usuario_id, "acessar_metricas"):
+        print("Acesso negado: o painel é exclusivo da coordenação ativa.")
+        return
 
+    while True:
         titulo_secao("PAINEL DA COORDENAÇÃO")
         print("1 - Atividades por professor")
         print("2 - Atividades por disciplina")
@@ -345,6 +341,9 @@ def menu_painel(usuario=None):
         print("0 - Voltar")
         opcao = input("Escolha uma opção: ").strip()
         if opcao == "0":
+            return
+        if not cadastro.verificar_permissao(usuario_id, "acessar_metricas"):
+            print("Acesso negado: o painel é exclusivo da coordenação ativa.")
             return
 
         try:

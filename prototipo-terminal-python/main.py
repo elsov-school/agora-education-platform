@@ -8,20 +8,10 @@ from provas import provas
 from usuarios import usuarios
 
 
-def usuario_da_sessao(usuario, perfil):
-    """Relê o cadastro para reconhecer desativação e mudanças de atribuição."""
-    if not usuario or not usuario.get("ativo") or usuario.get("perfil") != perfil:
-        return None
-    atual = usuarios.buscar_usuario(usuarios.carregar_usuarios(), usuario["id"])
-    if atual and atual.get("ativo") and atual.get("perfil") == perfil:
-        return atual
-    return None
-
-
 def menu_coordenacao(usuario):
     while True:
-        usuario = usuario_da_sessao(usuario, "coordenacao")
-        if not usuario:
+        usuario = usuarios.usuario_da_sessao(usuario, usuarios.carregar_usuarios())
+        if not usuario or usuario["perfil"] != "coordenacao":
             print("Acesso restrito à coordenação ativa.")
             return
         print(f"\nCOORDENAÇÃO | {usuario['nome']}")
@@ -56,8 +46,8 @@ def menu_coordenacao(usuario):
 
 def menu_professor(usuario):
     while True:
-        usuario = usuario_da_sessao(usuario, "professor")
-        if not usuario:
+        usuario = usuarios.usuario_da_sessao(usuario, usuarios.carregar_usuarios())
+        if not usuario or usuario["perfil"] != "professor":
             print("Acesso restrito a professores ativos.")
             return
         print(f"\nPROFESSOR | {usuario['nome']}")
@@ -66,6 +56,7 @@ def menu_professor(usuario):
         print("3 - Consultar conteúdo com evidência")
         print("4 - Gerar prova")
         print("5 - Gerenciar provas, histórico e exportação")
+        print("6 - Abrir biblioteca e editar meus materiais")
         print("9 - Trocar de usuário")
         print("0 - Sair do programa")
         opcao = input("Escolha uma opção: ").strip()
@@ -79,6 +70,8 @@ def menu_professor(usuario):
             provas.gerar_prova(usuario)
         elif opcao == "5":
             provas.gerenciar_provas(usuario)
+        elif opcao == "6":
+            materiais.gerenciar_materiais(usuario)
         elif opcao == "9":
             return
         elif opcao == "0":
@@ -89,9 +82,6 @@ def menu_professor(usuario):
 
 def menu_principal():
     print("\nÁGORA - BIBLIOTECA ESCOLAR")
-    if not hasattr(usuarios, "fazer_login"):
-        print("Para iniciar o login, integre a entrega contrato v1 do módulo usuários.")
-        return
     if not materiais.carregar_dados():
         return
     while True:

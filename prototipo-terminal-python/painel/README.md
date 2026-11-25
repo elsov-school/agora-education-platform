@@ -12,7 +12,7 @@ Entre como coordenação em `py main.py`, escolha **5 — Painel de métricas** 
 | Três materiais mais usados | Usa o contador `usos` do material. Mostra até três com uso positivo, com desempate por título e ID. |
 | Citações nas provas | Conta cada material uma vez por prova, mesmo com ID repetido. Referências históricas a materiais removidos continuam na contagem. |
 
-O painel relê os JSONs necessários a cada escolha. Se uma fonte estiver ilegível, a tela informa o erro e permite voltar. As telas de métricas abrem os arquivos apenas para leitura. A aprovação de pendências fica no menu de biblioteca da coordenação.
+O painel relê os JSONs necessários a cada escolha. Se uma fonte estiver ilegível, a tela informa o erro e permite voltar. As telas de métricas abrem os arquivos apenas para leitura. A coordenação aprova materiais em **Aprovar materiais pendentes** ou no menu da biblioteca.
 
 ### APIs
 
@@ -25,11 +25,11 @@ O painel relê os JSONs necessários a cada escolha. Se uma fonte estiver ilegí
 
 ### Testes
 
-A partir de `prototipo-terminal-python`, execute:
+Execute os comandos na pasta `prototipo-terminal-python`.
 
 ```sh
 python -m unittest discover -s tests -p "test_painel.py" -v
 python -m unittest discover -s tests -p "test_integracao.py" -v
 ```
 
-Os testes conferem acesso por perfil, troca de sessão, métricas, desempate, referências históricas, releitura e preservação dos arquivos temporários.
+O teste de ponta a ponta inicia o terminal com os seis módulos reais em uma escola temporária. Ele verifica que uma pesquisa preserva o contador, que a consulta e a prova salva somam dois usos e que exportação e leitura do painel preservam essa contagem. Os testes específicos do painel também cobrem empates, referências históricas, JSON inválido e perda de permissão enquanto o menu aguarda uma escolha.
