@@ -1,4 +1,4 @@
-"""Funcionalidades existentes; evoluções descritas em consultas/README.md.""""
+"""Funcionalidades existentes; evoluções descritas em consultas/README.md."""
 
 from materiais import materiais as biblioteca
 
