@@ -1,61 +1,40 @@
-# Ágora — Protótipo de terminal Python
+# Ágora — protótipo de terminal Python
 
-Execute nesta pasta: `py main.py` (Windows) ou `python3 main.py` (Linux/macOS). Não há dependências externas.
+O protótipo reúne a biblioteca curricular, consultas com evidência, provas e métricas da escola. Use Python 3 e a biblioteca padrão. Na pasta `prototipo-terminal-python`, execute `py main.py` no Windows ou `python3 main.py` no Linux/macOS.
 
-Cada CRUD reúne código, documentação e dados na mesma pasta. Consultas, padrões e painel têm documentação e código próprios; não precisam de JSON separado. O painel calcula métricas sobre os outros CRUDs.
+## Entrega contrato v1
 
-```text
-prototipo-terminal-python/
-├── main.py
-├── README.md
-├── usuarios/                  # CRUD 1 — feat/usuarios
-│   ├── __init__.py
-│   ├── usuarios.py
-│   ├── README.md
-│   └── usuarios.json
-├── materiais/                 # CRUD 2 — feat/materiais
-│   ├── __init__.py
-│   ├── materiais.py
-│   ├── README.md
-│   └── materiais.json
-├── provas/                    # CRUD 3 — feat/provas
-│   ├── __init__.py
-│   ├── provas.py
-│   ├── README.md
-│   └── atividades.json
-├── painel/                    # CRUD 4 — feat/painel-menu
-│   ├── __init__.py
-│   ├── painel.py
-│   └── README.md
-├── consultas/                 # feat/consultas
-│   ├── __init__.py
-│   ├── consultas.py
-│   └── README.md
-├── padroes/                   # feat/padroes-exportacao
-│   ├── __init__.py
-│   ├── padroes.py
-│   └── README.md
-└── exportacoes/
-    └── .gitkeep
-```
+O programa carrega a biblioteca e abre o login. No cadastro de demonstração, Paula Mendes (ID 1) representa a coordenação e Ana Souza (ID 2) é professora. O perfil e as atribuições vêm do cadastro. A opção **9** volta ao login e **0** encerra o programa nos menus de perfil.
 
-## Documentação de cada módulo
+| Perfil | Operações do menu |
+| --- | --- |
+| Coordenação | Gerenciar professores e atribuições, manter a biblioteca, aprovar pendências, configurar o padrão da escola, consultar métricas e acessar o histórico de provas |
+| Professor | Pesquisar a biblioteca permitida, sugerir um material, consultar conteúdo com evidência, gerar e revisar provas, acessar o próprio histórico e exportar |
 
-- [Usuários e perfis](usuarios/README.md)
-- [Biblioteca curricular — CRUD 2](materiais/README.md)
-- [Provas e atividades](provas/README.md)
-- [Painel e menu](painel/README.md)
-- [Consultas](consultas/README.md)
-- [Padrões e exportação](padroes/README.md)
+### Roteiro para demonstração
 
-## O que já funciona
+1. Entre como coordenação e confira a atribuição de turma, série e disciplina do professor.
+2. Entre como professor e sugira um material nessa atribuição. A sugestão entra na fila de aprovação.
+3. Troque para a coordenação, abra **Aprovar materiais pendentes** e confira o ID antes de aprovar.
+4. Volte como professor, pesquise o título e consulte uma palavra presente no conteúdo. A consulta exibe o trecho e a fonte.
+5. Gere uma prova com o material, revise e salve. No histórico, exporte as versões do aluno e do professor.
+6. No painel da coordenação, abra **Painel completo** para conferir a aprovação, os usos e a prova por professor, série e disciplina.
 
-O menu mantém cadastro, listagem, edição, exclusão, pesquisa de materiais, perguntas fixas, consulta e resumo. Os materiais existentes foram preservados em `materiais/materiais.json`. Os campos atuais ainda são `bncc` e `conteudo`; a evolução está descrita no README do módulo.
+### Módulos e persistência
 
-Os arquivos `usuarios/usuarios.json` e `provas/atividades.json` começam vazios (`[]`), preparados para os CRUDs futuros. As funções planejadas estão documentadas; autenticação, aprovação, persistência de provas e exportação ainda não estão implementadas.
+| Módulo | Dados e responsabilidade |
+| --- | --- |
+| [Usuários](usuarios/README.md) | `usuarios/usuarios.json` guarda perfis, situação e atribuições |
+| [Materiais](materiais/README.md) | `materiais/materiais.json` guarda o conteúdo, o status de validação e o contador de usos |
+| [Consultas](consultas/README.md) | Pesquisa e apresenta trechos dos materiais permitidos |
+| [Provas](provas/README.md) | `provas/atividades.json` guarda autoria, questões e referências aos materiais |
+| [Padrões e exportação](padroes/README.md) | `padroes/regras.json` guarda as regras da escola. Os textos exportados ficam em `exportacoes/` |
+| [Painel e menus](painel/README.md) | Lê os cadastros e históricos para calcular métricas da coordenação |
 
-JSON de materiais inválido é informado sem sobrescrever o arquivo. Arquivo ausente, vazio ou lista vazia recebe os quatro exemplos na inicialização. A exclusão pede confirmação com `s`. Conteúdos e códigos BNCC são ilustrativos; não há IA.
+Materiais antigos sem aprovação integram a fila de pendências. O conteúdo demonstrativo e os códigos BNCC são ilustrativos. As consultas recuperam texto cadastrado e as questões seguem regras locais.
 
-## Branches
+### Verificação
 
-Na raiz do repositório, use `git switch feat/usuarios`, substituindo pelo nome indicado na árvore. As seis branches locais compartilham esta estrutura organizada como base de desenvolvimento.
+Execute `python -m unittest discover -s tests -v` a partir da pasta do protótipo. Os testes do painel usam JSONs temporários. Os testes de navegação verificam a troca de perfil e o encaminhamento da sessão às funções dos módulos.
+
+A execução do roteiro completo depende da integração das cinco branches com as APIs do contrato v1. Esta entrega inicial liga os menus a essas APIs.
