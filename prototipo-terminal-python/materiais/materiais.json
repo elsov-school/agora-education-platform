@@ -58,5 +58,21 @@
         "autor_upload": null,
         "status_validacao": "pendente",
         "usos": 0
+    },
+    {
+        "titulo": "matematica basica",
+        "disciplina": "Matemática",
+        "serie": "3",
+        "bimestre": "2º Bimestre",
+        "bncc": "1234",
+        "habilidade_bncc": "1234",
+        "conteudo": "Livro sobre matematica",
+        "conteudo_texto": "Livro sobre matematica",
+        "tipo": "apostila",
+        "turma": "3A",
+        "id": 5,
+        "autor_upload": 1,
+        "status_validacao": "aprovado_coordenacao",
+        "usos": 2
     }
 ]

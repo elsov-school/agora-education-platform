@@ -4,7 +4,7 @@ Apresentação HTML independente da aplicação web e do CRUD em Python.
 
 **Abrir online:** [agora-apresentacao.vercel.app](https://agora-apresentacao.vercel.app).
 
-O arquivo `index.html` é uma cópia do original `agora-apresentacao-completa-v6.html`, com o nome padrão para abrir na página inicial do site. O conteúdo foi preservado, incluindo as imagens incorporadas e os controles da apresentação.
+Edite [index.html](index.html) para trabalhar na **v2**. Ela parte do HTML publicado na Vercel. A [cópia da v1](../agora-html-apresentacao-v1/index.html) guarda a apresentação anterior completa, incluindo imagens e controles.
 
 ## Abrir no computador
 
@@ -22,3 +22,7 @@ vercel deploy --prod --scope lohans-projects-1668e663
 ```
 
 A apresentação é publicada separadamente do site `agora-app-html-demo`.
+
+## Slides restaurados
+
+A v2 reúne novamente Matriz CSD, SWOT e Integrantes e papéis, recuperados da cópia v1. Os três slides técnicos da v2 foram preservados. A apresentação tem uma capa e 20 slides numerados; o contador de navegação mostra 21 telas no total.

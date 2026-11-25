@@ -14,7 +14,7 @@ A Ágora é um projeto acadêmico para organizar, consultar e produzir conteúdo
 
 Para testar o **CRUD simples**, escolha a versão de terminal. Para ver a **interface da plataforma**, escolha a aplicação web. Você pode executar apenas uma delas; os projetos usam dados separados.
 
-Para ver a apresentação, abra `agora-html-apresentacao/index.html` no navegador. Essa versão não precisa de Python ou instalação de pacotes.
+Abra a [apresentação v2](agora-html-apresentacao/index.html) ou a [cópia da v1](agora-html-apresentacao-v1/index.html) no navegador. A pasta da v2 é usada na publicação pela Vercel.
 
 Os protótipos atuais usam busca textual e geração local. Não precisam de conta em serviço de IA nem de chave de API. A integração com LLMs, embeddings e um pipeline RAG faz parte da proposta de evolução.
 
@@ -137,6 +137,8 @@ agora-education-platform/
 │   ├── README.md
 │   ├── main.py
 │   └── dados.json
+├── agora-html-apresentacao-v1/
+│   └── index.html
 └── agora-html-apresentacao/
     ├── README.md
     ├── index.html

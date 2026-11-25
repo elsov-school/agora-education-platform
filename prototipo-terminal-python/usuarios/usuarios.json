@@ -2,11 +2,14 @@
   {
     "id": 1,
     "nome": "Paula Mendes",
-    "email": "paula@escola.com",
+    "email": "lohanozorio@gmail.com",
     "perfil": "coordenacao",
     "turmas_lecionadas": [],
     "ativo": true,
-    "atribuicoes": []
+    "atribuicoes": [],
+    "senha_salt": "a01cd6a89c9fcdda8fbbbe2dbb2250c6",
+    "senha_hash": "e3adad321d634194878a6245e00e354d304781732bf92b8e1c8093fbd5f61898",
+    "senha_iteracoes": 600000
   },
   {
     "id": 2,
@@ -37,21 +40,29 @@
     "email": "carlos@escola.com",
     "perfil": "professor",
     "turmas_lecionadas": [
-      "8A_MAT",
-      "9A_MAT"
+      "9C_MAT"
     ],
     "ativo": false,
+    "atribuicoes": []
+  },
+  {
+    "id": 4,
+    "nome": "joao",
+    "email": "joao@email.com",
+    "perfil": "professor",
+    "turmas_lecionadas": [
+      "8A_MAT"
+    ],
     "atribuicoes": [
       {
         "turma": "8A",
         "serie": "8º ano",
         "disciplina": "Matemática"
-      },
-      {
-        "turma": "9A",
-        "serie": "9º ano",
-        "disciplina": "Matemática"
       }
-    ]
+    ],
+    "ativo": true,
+    "senha_salt": "ab5b17cb9c826c04d71a3b1c5b3c7b18",
+    "senha_hash": "f36fae67cdf6ca7443f3e4750a0779371385e32753895017e1c4733011466ba1",
+    "senha_iteracoes": 600000
   }
 ]

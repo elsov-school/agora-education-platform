@@ -1,0 +1,19 @@
+========================================
+PROVA - CESAR SCHOOL
+========================================
+Escola: cesar school
+Disciplina: Matemática
+Série: 3
+Bimestre: 2º Bimestre
+Professor ID: 1
+Instruções: Leia cada questão com atenção e registre suas respostas.
+
+QUESTÕES
+----------------------------------------
+1. Qual opção completa o trecho 1 de "matematica basica" como no original? «Livro sobre ____»
+   Tipo: multipla_escolha | Dificuldade: media
+   A) matematica
+   B) Livro
+   C) sobre
+
+========================================

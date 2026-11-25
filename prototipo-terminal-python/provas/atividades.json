@@ -1,1 +1,49 @@
-[]
+[
+    {
+        "id": 1,
+        "professor_id": 1,
+        "serie": "3",
+        "disciplina": "Matemática",
+        "bimestre": "2º Bimestre",
+        "materiais_referenciados": [
+            5
+        ],
+        "questoes": [
+            {
+                "enunciado": "Qual opção completa o trecho 1 de \"matematica basica\" como no original? «Livro sobre ____»",
+                "alternativas": [
+                    "matematica",
+                    "Livro",
+                    "sobre"
+                ],
+                "gabarito": "matematica",
+                "criterio_correcao": "Marcar o termo que consta na lacuna do trecho original.",
+                "tipo": "multipla_escolha",
+                "dificuldade": "media"
+            }
+        ],
+        "data_criacao": "25/11/2026 18:08",
+        "modelo_padrao": "institucional_v1"
+    },
+    {
+        "id": 2,
+        "professor_id": 1,
+        "serie": "3",
+        "disciplina": "Matemática",
+        "bimestre": "2º Bimestre",
+        "materiais_referenciados": [
+            5
+        ],
+        "questoes": [
+            {
+                "enunciado": "No trecho 1 de \"matematica basica\", «Livro sobre ____», a palavra que completa a lacuna no original é «matematica». Verdadeiro ou falso?",
+                "gabarito": "Verdadeiro",
+                "criterio_correcao": "A palavra nessa posição do original é «matematica».",
+                "tipo": "verdadeiro_falso",
+                "dificuldade": "dificil"
+            }
+        ],
+        "data_criacao": "25/11/2026 18:11",
+        "modelo_padrao": "institucional_v1"
+    }
+]

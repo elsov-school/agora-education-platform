@@ -1,0 +1,14 @@
+========================================
+GABARITO DO PROFESSOR
+========================================
+Escola: cesar school
+Disciplina: Matemática
+Série: 3
+Bimestre: 2º Bimestre
+Professor ID: 1
+
+GABARITO
+----------------------------------------
+1. matematica
+   Critério: Marcar o termo que consta na lacuna do trecho original.
+========================================
