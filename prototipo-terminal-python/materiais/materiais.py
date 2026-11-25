@@ -161,7 +161,9 @@ def carregar_dados():
         return False
 
 
-def _salvar(novos, esperado):
+def _salvar(novos, esperado, usuario=None):
+    if usuario is not None and not _autorizado(usuario):
+        return False
     try:
         _gravar(_migrar(novos), esperado)
         return True
@@ -214,7 +216,12 @@ def _autorizado(usuario, perfis=("professor", "coordenacao")):
     if (isinstance(usuario, dict) and usuario.get("ativo") is True
             and usuario.get("perfil") in perfis and type(usuario.get("id")) is int
             and usuario["id"] > 0):
-        return True
+        try:
+            atual = cadastro.buscar_usuario(cadastro.carregar_usuarios(), usuario["id"])
+            if atual and atual.get("ativo") is True and atual.get("perfil") == usuario["perfil"]:
+                return True
+        except (ValueError, OSError, TypeError, KeyError) as erro:
+            print("Não foi possível verificar a sessão no cadastro:", erro)
     print("Acesso negado para esta operação.")
     return False
 
@@ -279,7 +286,7 @@ def adicionar_material(usuario=None):
     material["autor_upload"] = usuario["id"]
     material["status_validacao"] = APROVADO if usuario["perfil"] == "coordenacao" else PENDENTE
     material["usos"] = 0
-    if not _salvar(materiais + [material], versao):
+    if not _salvar(materiais + [material], versao, usuario):
         return False
     print(f"Material {material['id']} cadastrado. Situação: {material['status_validacao']}.")
     return True
@@ -319,12 +326,12 @@ def visualizar_material(usuario=None):
         mostrar_material(material)
 
 
-def _atualizar(material, campos, versao):
+def _atualizar(material, campos, versao, usuario):
     novos = materiais.copy()
     alterado = material.copy()
     alterado.update(campos)
     novos[novos.index(material)] = alterado
-    return _salvar(novos, versao)
+    return _salvar(novos, versao, usuario)
 
 
 def editar_material(usuario=None):
@@ -341,7 +348,7 @@ def editar_material(usuario=None):
     campos = _ler_campos(material)
     if professor:
         campos["status_validacao"] = PENDENTE
-    if not _atualizar(material, campos, versao):
+    if not _atualizar(material, campos, versao, usuario):
         return False
     print("Material atualizado.")
     return True
@@ -363,7 +370,7 @@ def aprovar_materiais_pendentes(usuario):
     if input("Aprovar este material? (s/n) ").strip().lower() != "s":
         print("Aprovação cancelada.")
         return False
-    if not _atualizar(material, {"status_validacao": APROVADO}, versao):
+    if not _atualizar(material, {"status_validacao": APROVADO}, versao, usuario):
         return False
     print("Material aprovado pela coordenação.")
     return True
@@ -405,7 +412,7 @@ def excluir_material(usuario=None):
         return False
     novos = materiais.copy()
     novos.remove(material)
-    if not _salvar(novos, versao):
+    if not _salvar(novos, versao, usuario):
         return False
     print("Material excluído.")
     return True
@@ -440,10 +447,8 @@ def registrar_uso(material_id):
 
 
 def gerenciar_materiais(usuario=None):
-    if not _autorizado(usuario):
-        return
-    coordenacao = usuario["perfil"] == "coordenacao"
-    while carregar_dados():
+    while _autorizado(usuario) and carregar_dados():
+        coordenacao = usuario["perfil"] == "coordenacao"
         print("\n=== Biblioteca curricular ===")
         _listar(_visiveis(usuario))
         print("1 - Visualizar material")

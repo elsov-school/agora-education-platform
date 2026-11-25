@@ -17,7 +17,7 @@ A coordenação pode cadastrar, consultar, editar, aprovar e excluir materiais. 
 | `registrar_uso(material_id)` | Reabre o JSON, incrementa um uso e atualiza a lista compartilhada. Retorna `True` quando grava. Consultas e provas chamam essa função após uma consulta respondida ou uma prova salva. |
 | `carregar_dados()`, `salvar_dados()` | Operações de persistência sobre a lista compartilhada `materiais`. Retornam `True` em caso de sucesso. A lista mantém sua identidade para quem a importou. |
 
-As operações interativas recebem o dicionário da sessão. Sessões ausentes, inativas ou com perfil desconhecido não podem operar na biblioteca.
+As operações interativas recebem o dicionário da sessão e conferem o perfil e a situação atuais no cadastro de usuários ao iniciar e antes de gravar. Sessões ausentes, inativas ou com perfil desconhecido não podem operar na biblioteca.
 
 ### Migração do acervo
 
