@@ -39,10 +39,16 @@ def verificar_migracao(arquivo, coord):
 
 
 def verificar_login(arquivo, coord):
-    """O login aceita ID e e-mail, rejeita inativos e permite sair."""
-    with patch("builtins.input", side_effect=["7", "999", "  DOCENTE@example.test "]):
+    """O login exige e-mail e senha, rejeita IDs e inativos e permite sair."""
+    registros = cadastro.carregar_usuarios()
+    for registro in registros:
+        registro.update(cadastro.preparar_senha("SenhaTeste123!"))
+    arquivo.write_text(json.dumps(registros), encoding="utf-8")
+    with patch("builtins.input", side_effect=["inativo@example.test", "4", "  DOCENTE@example.test "]), \
+            patch.object(cadastro, "ler_senha", return_value="SenhaTeste123!"):
         assert cadastro.fazer_login()["id"] == 4
-    with patch("builtins.input", return_value="1"):
+    with patch("builtins.input", return_value="coord@example.test"), \
+            patch.object(cadastro, "ler_senha", return_value="SenhaTeste123!"):
         assert cadastro.fazer_login()["id"] == 1
     with patch("builtins.input", return_value="0"):
         assert cadastro.fazer_login() is None
@@ -50,12 +56,14 @@ def verificar_login(arquivo, coord):
 
 def verificar_menu(arquivo, coord):
     """A coordenação cadastra e atualiza atribuições pelo menu, que persistem após novo login."""
-    with patch("builtins.input", side_effect=[
+    coord = cadastro.configurar_primeiro_acesso("coord@example.test", "SenhaTeste123!")
+    with patch.object(cadastro, "ler_senha", return_value="SenhaTeste123!"), patch("builtins.input", side_effect=[
         "1", "  Bia  ", " BIA@example.test ", "6A_CIEN, 8B | 8º ano | História, X",
         "2", "4", "8", "7A | 7º ano | Geografia", "3", "0",
     ]):
         cadastro.gerenciar_usuarios(coord)
-    with patch("builtins.input", return_value="bia@example.test"):
+    with patch("builtins.input", return_value="bia@example.test"), \
+            patch.object(cadastro, "ler_senha", return_value="SenhaTeste123!"):
         docente = cadastro.fazer_login()
     assert docente["id"] == 8 and docente["nome"] == "Bia"
     assert docente["turmas_lecionadas"] == ["7A"]

@@ -4,12 +4,26 @@ O protótipo reúne a biblioteca curricular, consultas com evidência, provas e 
 
 ## Entrega contrato v1
 
-O programa carrega a biblioteca e pede o ID ou e-mail de um usuário ativo. O login é demonstrativo, sem senha. No cadastro de demonstração, Paula Mendes (ID 1) representa a coordenação e Ana Souza (ID 2) é professora. O perfil e as atribuições vêm do cadastro. A opção **9** volta ao login e **0** encerra o programa nos menus de perfil.
+O programa carrega a biblioteca e pede o e-mail e a senha de um usuário ativo. Não exibe a lista de contas nem aceita o ID como login. A senha fica oculta durante a digitação no terminal. No cadastro de demonstração, Paula Mendes representa a coordenação e Ana Souza é professora. O perfil e as atribuições vêm do cadastro. A opção **9** volta ao login e **0** encerra o programa nos menus de perfil.
 
 | Perfil | Operações do menu |
 | --- | --- |
 | Coordenação | Gerenciar professores e atribuições, manter a biblioteca, aprovar pendências, configurar o padrão da escola, consultar métricas e acessar o histórico de provas |
 | Professor | Abrir ou pesquisar a biblioteca permitida, sugerir e editar materiais próprios, consultar conteúdo com evidência, gerar e revisar provas, acessar o próprio histórico e exportar |
+
+### Configurar e-mail e senha
+
+Os cadastros antigos foram preservados e ainda não têm senha. Antes do primeiro login, execute nesta pasta:
+
+```powershell
+py configurar_acesso.py
+```
+
+O configurador identifica a conta de coordenação existente. Informe o e-mail que você quer usar para entrar (pode ser seu próprio e-mail) e escolha uma senha de pelo menos 8 caracteres, repetindo-a para confirmar. O e-mail anterior é atualizado, preservando ID, nome, perfil e demais dados; não é criada uma conta duplicada. Essa configuração local funciona uma única vez, enquanto nenhuma coordenação ativa tiver senha. Não existe senha padrão. Depois execute `py main.py` e entre com e-mail e senha.
+
+Na coordenação, abra **1 — Gerenciar usuários → 6 — Definir ou redefinir senha** para dar acesso aos professores existentes. O cadastro de um novo professor já solicita senha e confirmação. Contas antigas sem senha e usuários inativos não conseguem entrar. A opção 0 no campo de e-mail encerra o programa.
+
+O JSON guarda um hash PBKDF2-SHA256, um salt aleatório e o número de iterações, nunca a senha original. Esses recursos usam apenas a biblioteca padrão do Python. O arquivo JSON ainda exige proteção de acesso no computador; este é um protótipo local, sem recuperação de senha por e-mail. Não publique cadastros reais nem credenciais locais no repositório.
 
 ### Roteiro para demonstração
 

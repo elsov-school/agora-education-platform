@@ -87,7 +87,8 @@ class TestEscolaTemporaria(unittest.TestCase):
         shutil.copytree(origem, self.escola, ignore=shutil.ignore_patterns("__pycache__", "tests", "*.txt"))
         self.gravar("usuarios/usuarios.json", [
             {"id": 1, "nome": "Coordenação", "perfil": "coordenacao", "email": "coord@example.org",
-             "ativo": True, "turmas_lecionadas": [], "atribuicoes": []}
+             "ativo": True, "turmas_lecionadas": [], "atribuicoes": [],
+             **main.usuarios.preparar_senha("SenhaTeste123!")}
         ])
         self.gravar("materiais/materiais.json", [])
         self.gravar("provas/atividades.json", [])
@@ -99,11 +100,25 @@ class TestEscolaTemporaria(unittest.TestCase):
         return json.loads((self.escola / caminho).read_text(encoding="utf-8"))
 
     def terminal(self, *entradas):
+        # Os IDs abaixo são atalhos do roteiro de teste, nunca uma entrada aceita pelo login.
+        emails = {"1": "coord@example.org", "2": "docente@example.org", "3": "colega@example.org"}
+        roteiro = []
+        login = True
+        for entrada in entradas:
+            if login:
+                roteiro.append(emails.get(entrada, entrada))
+                if entrada != "0":
+                    roteiro.append("SenhaTeste123!")
+                login = False
+            else:
+                roteiro.append(entrada)
+            if entrada == "9":
+                login = True
         ambiente = dict(os.environ, PYTHONIOENCODING="utf-8")
         processo = subprocess.run(
             [sys.executable, "-B", "main.py"], cwd=self.escola, env=ambiente,
-            input="\n".join(entradas) + "\n", capture_output=True,
-            encoding="utf-8", timeout=15
+            input="\n".join(roteiro) + "\n", capture_output=True,
+            encoding="utf-8", timeout=30
         )
         self.assertEqual(processo.returncode, 0, processo.stdout + processo.stderr)
         self.assertIn("Até logo!", processo.stdout, processo.stdout)
@@ -123,7 +138,9 @@ class TestEscolaTemporaria(unittest.TestCase):
         ])
         self.terminal("1", "1",
                       "1", "Docente", "docente@example.org", "6A | 6º ano | Ciências",
-                      "1", "Colega", "colega@example.org", "6A | 6º ano | Ciências", "0",
+                      "SenhaTeste123!", "SenhaTeste123!",
+                      "1", "Colega", "colega@example.org", "6A | 6º ano | Ciências",
+                      "SenhaTeste123!", "SenhaTeste123!", "0",
                       "4", "Escola de teste", "2", "Leia e responda.", "0")
         professor = self.ler("usuarios/usuarios.json")[1]
         self.assertEqual(professor["atribuicoes"], [{"turma": "6A", "serie": "6º ano", "disciplina": "Ciências"}])
@@ -201,5 +218,5 @@ class TestEscolaTemporaria(unittest.TestCase):
         self.terminal("2", "5", "4", pid, "s", "0", "0")
         self.assertEqual(self.ler("provas/atividades.json"), [])
         saida = self.terminal("1", "1", "5", "2", "0", "9", "2", "0")
-        self.assertIn("Usuário não encontrado ou inativo", saida)
+        self.assertIn("E-mail ou senha inválidos", saida)
         self.assertFalse(self.ler("usuarios/usuarios.json")[1]["ativo"])

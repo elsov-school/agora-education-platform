@@ -2,9 +2,46 @@
 
 import json
 import os
+import getpass
+import hashlib
+import hmac
+import secrets
+import sys
 
 PASTA_ATUAL = os.path.dirname(os.path.abspath(__file__))
 ARQUIVO_USUARIOS = os.path.join(PASTA_ATUAL, "usuarios.json")
+ITERACOES_SENHA = 600000
+
+
+def ler_senha(pergunta="Senha: "):
+    if sys.stdin.isatty():
+        return getpass.getpass(pergunta)
+    # Entrada redirecionada em testes/scripts: não tentar ler o teclado do Windows.
+    return input(pergunta)
+
+
+def preparar_senha(senha):
+    """Guarda um resumo com salt aleatório; nunca a senha em texto puro."""
+    if not isinstance(senha, str) or len(senha) < 8 or not senha.strip():
+        raise ValueError("A senha deve ter pelo menos 8 caracteres.")
+    salt = secrets.token_hex(16)
+    resumo = hashlib.pbkdf2_hmac("sha256", senha.encode("utf-8"), bytes.fromhex(salt), ITERACOES_SENHA)
+    return {"senha_salt": salt, "senha_hash": resumo.hex(), "senha_iteracoes": ITERACOES_SENHA}
+
+
+def conferir_senha(usuario, senha):
+    if not usuario.get("senha_hash"):
+        return False
+    resumo = hashlib.pbkdf2_hmac("sha256", senha.encode("utf-8"),
+                                 bytes.fromhex(usuario["senha_salt"]), usuario["senha_iteracoes"])
+    return hmac.compare_digest(resumo.hex(), usuario["senha_hash"])
+
+
+def pedir_nova_senha():
+    senha = ler_senha("Nova senha (mínimo 8 caracteres): ")
+    if senha != ler_senha("Confirme a nova senha: "):
+        raise ValueError("As senhas não coincidem.")
+    return senha
 
 PERMISSOES = {
     "coordenacao": {"gerenciar_usuarios", "aprovar_materiais", "acessar_metricas"},
@@ -81,6 +118,16 @@ def validar_cadastro(usuarios):
         emails.add(email)
         if registro["perfil"] not in PERMISSOES or type(registro.get("ativo")) is not bool:
             raise ValueError("Perfil ou situação inválida no cadastro.")
+        campos_senha = ("senha_salt", "senha_hash", "senha_iteracoes")
+        if any(campo in registro for campo in campos_senha):
+            salt = registro.get("senha_salt")
+            resumo = registro.get("senha_hash")
+            iteracoes = registro.get("senha_iteracoes")
+            if (not isinstance(salt, str) or len(salt) != 32
+                    or not isinstance(resumo, str) or len(resumo) != 64
+                    or any(c not in "0123456789abcdef" for c in salt + resumo)
+                    or type(iteracoes) is not int or not 100000 <= iteracoes <= 2000000):
+                raise ValueError("Configuração de senha inválida no cadastro.")
         turmas = normalizar_turmas(registro.get("turmas_lecionadas"))
         if "atribuicoes" in registro and not isinstance(registro["atribuicoes"], list):
             raise ValueError("O campo atribuicoes deve ser uma lista.")
@@ -121,7 +168,8 @@ def usuario_da_sessao(usuario, usuarios):
     if not isinstance(usuario, dict) or usuario.get("ativo") is not True:
         return None
     atual = buscar_usuario(usuarios, usuario.get("id"))
-    if atual and atual["ativo"] and atual["perfil"] == usuario.get("perfil"):
+    if (atual and atual["ativo"] and atual["perfil"] == usuario.get("perfil")
+            and atual.get("senha_hash") == usuario.get("senha_hash")):
         return atual
     return None
 
@@ -156,7 +204,7 @@ def salvar_usuarios(usuarios, usuario=None, anteriores=None):
             os.remove(temporario)
 
 
-def cadastrar_professor(nome, email, turmas_lecionadas, usuario=None, atribuicoes=None):
+def cadastrar_professor(nome, email, turmas_lecionadas, usuario=None, atribuicoes=None, senha=None):
     usuarios = carregar_usuarios()
     exigir_coordenacao(usuario, usuarios)
     if not isinstance(nome, str) or not nome.strip():
@@ -181,8 +229,54 @@ def cadastrar_professor(nome, email, turmas_lecionadas, usuario=None, atribuicoe
         "atribuicoes": preparar_atribuicoes(turmas, atribuicoes),
         "ativo": True,
     }
+    if senha is not None:
+        professor.update(preparar_senha(senha))
     salvar_usuarios(usuarios + [professor], usuario, usuarios)
     return professor
+
+
+def definir_senha(usuario_id, senha, usuario=None):
+    """A coordenação define ou redefine a senha sem alterar os outros campos."""
+    usuarios = carregar_usuarios()
+    exigir_coordenacao(usuario, usuarios)
+    alvo = buscar_usuario(usuarios, usuario_id)
+    if alvo is None or not alvo["ativo"]:
+        raise ValueError("Informe um usuário ativo cadastrado.")
+    atualizado = alvo.copy()
+    atualizado.update(preparar_senha(senha))
+    novos = usuarios.copy()
+    novos[usuarios.index(alvo)] = atualizado
+    salvar_usuarios(novos, usuario, usuarios)
+    return atualizado
+
+
+def configurar_primeiro_acesso(email, senha, email_atual=None):
+    """Configuração local, uma única vez, para uma coordenação já cadastrada."""
+    usuarios = carregar_usuarios()
+    for registro in usuarios:
+        if registro["ativo"] and registro["perfil"] == "coordenacao" and registro.get("senha_hash"):
+            raise ValueError("O acesso inicial já foi configurado. Use a gestão de usuários para redefinir senhas.")
+    if not isinstance(email, str):
+        raise ValueError("Informe um e-mail válido.")
+    email = email.strip().lower()
+    partes = email.split("@")
+    if len(partes) != 2 or not all(partes) or len(email.split()) != 1:
+        raise ValueError("Informe um e-mail válido.")
+    identificador = email_atual if email_atual is not None else email
+    for registro in usuarios:
+        if (registro["ativo"] and registro["perfil"] == "coordenacao"
+                and registro["email"].strip().casefold() == identificador.strip().casefold()):
+            for outro in usuarios:
+                if outro["id"] != registro["id"] and outro["email"].strip().casefold() == email.casefold():
+                    raise ValueError("Já existe um usuário com esse e-mail.")
+            atualizado = registro.copy()
+            atualizado["email"] = email
+            atualizado.update(preparar_senha(senha))
+            novos = usuarios.copy()
+            novos[usuarios.index(registro)] = atualizado
+            salvar_usuarios(novos, registro, usuarios)
+            return atualizado
+    raise ValueError("Informe o e-mail de uma coordenação ativa já cadastrada.")
 
 
 def listar_professores(incluir_inativos=False, usuario=None):
@@ -281,22 +375,35 @@ def filtrar_materiais_do_professor(usuario, lista_materiais):
 
 
 def fazer_login():
-    """Identifica o usuário por ID ou e-mail no protótipo de terminal."""
+    """Autentica por e-mail e senha, sem exibir contas ou aceitar IDs."""
+    print("\n========================================")
+    print("          ENTRAR NO ÁGORA")
+    print("========================================")
+    print("Use seu e-mail e sua senha. Digite 0 no e-mail para sair.")
     while True:
-        entrada = input("ID ou e-mail (0 para sair): ").strip()
-        if entrada == "0":
-            return None
         try:
             usuarios = carregar_usuarios()
         except (ValueError, OSError) as erro:
             print(f"Erro ao abrir o cadastro: {erro}")
             return None
+        if not any(u["ativo"] and u["perfil"] == "coordenacao" and u.get("senha_hash") for u in usuarios):
+            print("A coordenação precisa configurar o primeiro acesso neste computador.")
+            print("Encerre e execute: py configurar_acesso.py")
+            return None
+        email = input("E-mail (0 para sair): ").strip().casefold()
+        if email == "0":
+            return None
+        senha = ler_senha()
         for usuario in usuarios:
-            if entrada == str(usuario["id"]) or entrada.casefold() == usuario["email"].strip().casefold():
-                if usuario["ativo"]:
-                    return usuario
+            if (email == usuario["email"].strip().casefold() and usuario["ativo"]
+                    and conferir_senha(usuario, senha)):
+                # A conta pode ter sido desativada ou alterada enquanto a senha era digitada.
+                atual = usuario_da_sessao(usuario, carregar_usuarios())
+                if atual:
+                    print(f"Bem-vindo(a), {atual['nome']}!")
+                    return atual
                 break
-        print("Usuário não encontrado ou inativo.")
+        print("E-mail ou senha inválidos, ou acesso indisponível.")
 
 
 def ler_turmas():
@@ -358,6 +465,7 @@ def gerenciar_usuarios(usuario=None):
         print("3 - Listar todos (inclui inativos)")
         print("4 - Atualizar turmas e atribuições de um professor")
         print("5 - Desativar usuário")
+        print("6 - Definir ou redefinir senha de um usuário")
         print("0 - Voltar")
         opcao = input("Escolha uma opção: ").strip()
         try:
@@ -365,7 +473,8 @@ def gerenciar_usuarios(usuario=None):
                 nome = input("Nome: ")
                 email = input("E-mail: ")
                 turmas, atribuicoes = ler_turmas_e_atribuicoes()
-                professor = cadastrar_professor(nome, email, turmas, usuario, atribuicoes)
+                senha = pedir_nova_senha()
+                professor = cadastrar_professor(nome, email, turmas, usuario, atribuicoes, senha=senha)
                 print(f"Professor '{professor['nome']}' cadastrado com ID {professor['id']}.")
             elif opcao in ("2", "3"):
                 mostrar_professores(listar_professores(opcao == "3", usuario))
@@ -378,6 +487,13 @@ def gerenciar_usuarios(usuario=None):
                 usuario_id = ler_id("ID do usuário: ")
                 inativo = desativar_usuario(usuario_id, usuario)
                 print(f"Usuário '{inativo['nome']}' desativado.")
+            elif opcao == "6":
+                usuario_id = ler_id("ID do usuário: ")
+                atualizado = definir_senha(usuario_id, pedir_nova_senha(), usuario)
+                print("Senha definida. O usuário já pode entrar com e-mail e senha.")
+                if atualizado["id"] == usuario["id"]:
+                    print("Entre novamente com sua nova senha.")
+                    return
             elif opcao == "0":
                 return
             else:
