@@ -83,8 +83,9 @@ def _usuario_ativo(usuario):
     if isinstance(usuario, dict) and usuario.get("ativo") is True and type(usuario.get("id")) is int:
         try:
             atual = usuarios.buscar_usuario(usuarios.carregar_usuarios(), usuario["id"])
-            if atual and atual.get("ativo") is True and atual.get("perfil") in ("professor", "coordenacao"):
-                return atual
+            if atual and atual.get("ativo") is True and atual.get("perfil") == usuario.get("perfil"):
+                if atual["perfil"] in ("professor", "coordenacao"):
+                    return atual
         except (OSError, ValueError, TypeError, KeyError) as erro:
             print("Não foi possível consultar usuários:", erro)
     print("Entre com um usuário ativo para acessar as provas.")
@@ -269,11 +270,12 @@ def gerar_atividade(usuario=None):
     return gerar_prova(usuario)
 
 
-def _data_criacao(atividade):
+def _ordem_criacao(atividade):
     try:
-        return datetime.strptime(atividade["data_criacao"], "%d/%m/%Y %H:%M")
+        data = datetime.strptime(atividade["data_criacao"], "%d/%m/%Y %H:%M")
     except (KeyError, ValueError, TypeError):
-        return datetime.min
+        data = datetime.min
+    return data, atividade["id"]
 
 
 def listar_historico(professor_id=None, usuario=None):
@@ -289,7 +291,7 @@ def listar_historico(professor_id=None, usuario=None):
     if registros is None:
         return []
     historico = [a for a in registros if professor_id is None or verificar_autoria(a, professor_id)]
-    historico.sort(key=_data_criacao, reverse=True)
+    historico.sort(key=_ordem_criacao, reverse=True)
     for atividade in historico:
         print(f"[{atividade['id']}] {atividade.get('data_criacao', '')} | Autor {atividade['professor_id']} | "
               f"{atividade.get('serie', '')} | {atividade.get('disciplina', '')} | {atividade.get('bimestre', '')}")

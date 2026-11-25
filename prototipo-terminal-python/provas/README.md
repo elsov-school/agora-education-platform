@@ -45,4 +45,6 @@ As chamadas que já recebiam `professor_id` mantêm a ordem dos argumentos e rec
 
 Na raiz do repositório, execute `python -B -m unittest discover -s prototipo-terminal-python/tests -p test_provas.py -v`.
 
-Os testes usam arquivos temporários de usuários, materiais e provas. Exercitam o menu, os três tipos, os limites de geração, a revisão, a autoria, a recarga do histórico, a exclusão e as falhas de gravação. Substitutos das APIs parceiras verificam o filtro aplicado, a leitura do limite institucional, a contagem de usos e o encaminhamento da prova salva para exportação. A geração dos dois arquivos de texto é exercitada pelo módulo de padrões e pela integração geral.
+Os testes usam arquivos temporários de usuários, materiais e provas. Exercitam o menu, os três tipos, os limites de geração, a revisão, a autoria, a recarga do histórico, a exclusão e as falhas de gravação. Substitutos das APIs parceiras verificam o filtro aplicado, a leitura do limite institucional, a contagem de usos e o encaminhamento da prova salva para exportação.
+
+Também foi executado um cenário temporário com as implementações reais de usuários (`393d965`), materiais (`1c61b2b`) e padrões (`b8eef27`). Após o login e a aprovação de um material pela coordenação, o professor gerou uma prova de cada tipo. Foram conferidos os três usos, os seis arquivos de aluno e gabarito, o histórico recarregado e a exclusão confirmada.

@@ -172,7 +172,7 @@ class TestProvas(unittest.TestCase):
     def test_identidade_sessao_e_desativacao(self):
         prova = self.salvar()
         self.assertIsNone(provas.salvar_prova(2, self.dados))
-        for sessao in (None, self.outro, dict(self.outro, perfil="coordenacao"),
+        for sessao in (None, self.outro, dict(self.outro, perfil="coordenacao"), dict(self.coord, perfil="professor"),
                        {"id": 999, "perfil": "coordenacao", "ativo": True}):
             self.assertFalse(provas.editar_questao(2, 1, 0, self.questao, usuario=sessao))
             self.assertFalse(provas.excluir_prova(1, 2, usuario=sessao))
@@ -219,6 +219,7 @@ class TestProvas(unittest.TestCase):
         self.assertEqual(self.registros()[:2], [antiga, outra])
         self.assertEqual(provas.listar_historico(usuario=self.professor), [nova, antiga])
         self.assertEqual(provas.listar_historico(3, usuario=self.coord), [outra])
+        self.assertEqual(provas.listar_historico(usuario=self.coord), [nova, outra, antiga])
 
     def test_edita_alternativas_e_confere_o_gabarito(self):
         questao = questoes_do_material(self.material, "multipla_escolha", "media")[0]
