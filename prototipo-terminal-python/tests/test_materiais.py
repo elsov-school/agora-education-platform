@@ -21,6 +21,14 @@ class TestMateriais(unittest.TestCase):
         self.addCleanup(pasta.cleanup)
         self.banco = Path(pasta.name) / "materiais.json"
         self.historico = Path(pasta.name) / "atividades.json"
+        self.cadastro = Path(pasta.name) / "usuarios.json"
+        self.registros = [
+            dict(COORDENACAO, nome="Coordenação", email="coord@example.test", turmas_lecionadas=[]),
+            dict(PROFESSOR, nome="Docente", email="docente@example.test", turmas_lecionadas=["6A_CIEN"]),
+            dict(PROFESSOR, id=10, nome="Docente 2", email="outro@example.test", turmas_lecionadas=["6A_CIEN"]),
+        ]
+        self.escrever(self.cadastro, self.registros)
+        self.enterContext(patch.object(biblioteca.cadastro, "ARQUIVO_USUARIOS", str(self.cadastro)))
         self.escrever(self.banco, [])
         self.escrever(self.historico, [])
         self.enterContext(patch.object(biblioteca, "ARQUIVO_DADOS", str(self.banco)))
@@ -155,6 +163,24 @@ class TestMateriais(unittest.TestCase):
                     self.assertFalse(operacao(usuario))
             self.assertFalse(biblioteca.excluir_material(PROFESSOR))
             self.assertFalse(biblioteca.aprovar_materiais_pendentes(PROFESSOR))
+        self.assertEqual(self.ler(), [])
+
+    def test_revalida_perfil_e_atividade_antes_de_operar_e_de_gravar(self):
+        self.registros[0]["ativo"] = False
+        self.escrever(self.cadastro, self.registros)
+        with patch("builtins.input", side_effect=AssertionError("Sessão sem permissão")):
+            self.assertFalse(biblioteca.aprovar_materiais_pendentes(COORDENACAO))
+            self.assertFalse(biblioteca.adicionar_material(dict(PROFESSOR, perfil="coordenacao")))
+
+        respostas = iter(CADASTRO)
+        def responder(pergunta):
+            if pergunta.startswith("Turma"):
+                self.registros[1]["ativo"] = False
+                self.escrever(self.cadastro, self.registros)
+            return next(respostas)
+
+        with patch("builtins.input", side_effect=responder):
+            self.assertFalse(biblioteca.adicionar_material(PROFESSOR))
         self.assertEqual(self.ler(), [])
 
     def test_exclusao_exige_confirmacao_e_preserva_historico(self):
